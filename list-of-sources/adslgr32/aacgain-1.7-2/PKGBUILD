@@ -1,0 +1,27 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+arch=('i686' 'x86_64')
+pkgname=aacgain
+pkgver=1.7
+pkgrel=2
+pkgdesc="Adjusts the volume of music files (mp4/m4a/QT/mp3) using ReplayGain algorithm."
+url="http://altosdesign.com/aacgain"
+license="GPL"
+depends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://altosdesign.com/aacgain/aacgain-$pkgver.tar.bz2)
+md5sums=('de7a95488dac7c34c45896a4c0772709')
+
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make
+  mkdir -p $pkgdir/usr/bin
+  make prefix=$pkgdir/usr install
+}
+

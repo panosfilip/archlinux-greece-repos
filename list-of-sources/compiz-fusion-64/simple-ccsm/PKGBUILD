@@ -1,0 +1,19 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=simple-ccsm
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="A simple Compizconfig Settings Manager in Python"
+url="http://www.compiz-fusion.org/"
+license=('GPL')
+arch=('i686' 'x86_64')
+depends=("compiz-core>=${pkgver}" "compizconfig-python>=${pkgver}" 'pygtk')
+install=simple-ccsm.install
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('8d9225e28676cca5d4722aa1808d882f')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./setup.py install --prefix=/usr --root=${pkgdir}
+}
+

@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=lib32-openssl
+pkgname32=${pkgname/lib32-/}
+pkgver=0.9.8h
+pkgrel=4
+pkgrel32=4
+license='BSD'
+
+pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Se
+curity"
+arch=('x86_64')
+groups='lib32'
+url="http://www.openssl.org"
+depends=('lib32-glibc')
+
+source=(ftp://ftp.archlinux.org/core/os/i686/${pkgname32}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz)
+md5sums=('70c172f310aae2543f197b3c5da40cf7')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/lib/
+  cp -rPf ${srcdir}/usr/lib ${pkgdir}/opt/lib32/usr/
+}
+

@@ -1,0 +1,39 @@
+#Contributor: Flamelab <panosfilip@gmail.com>
+
+pkgname=kdenlive-svn
+_realname=kdenlive
+pkgver=4180
+_realver=0.7.8
+pkgrel=1
+pkgdesc="A video editing GUI for KDE using the MLT video framework."
+arch=('i686' 'x86_64')
+url="http://kdenlive.sourceforge.net/"
+license=('GPL')
+depends=('kdebase-runtime' 'mlt-git' 'dvgrab')
+makedepends=('cmake' 'automoc4')
+provides=("${_realname}=${_realver}")
+conflicts=("${_realname}")
+options=(!libtool)
+replaces=("${_realname}")
+
+_svntrunk=https://kdenlive.svn.sourceforge.net/svnroot/kdenlive/trunk/kdenlive
+_svnmod=kdenlive
+
+build() 
+{  
+  cd ${srcdir}
+  svn co $_svntrunk --config-dir ./
+  cd ${_realname}
+  if [ ! -d build ];then
+       mkdir build
+  fi
+}
+
+package() 
+
+{
+  cd ${srcdir}/${_realname}/build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+  make
+  make DESTDIR=$pkgdir install
+}

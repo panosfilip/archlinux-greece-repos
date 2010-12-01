@@ -1,0 +1,48 @@
+#Contributor: Flamelab <panosfilip@gmail.com>
+
+pkgname=filezilla-svn
+_realname=filezilla
+pkgver=3555
+_realver=3.3.0.1
+pkgrel=1
+pkgdesc="Fast and reliable FTP, FTPS and SFTP client"
+arch=('i686' 'x86_64')
+url="http://filezilla-project.org/"
+license=('GPL')
+depends=('wxgtk' 'libidn' 'hicolor-icon-theme' 'gnutls' 'dbus-core')
+makedepends=('subversion')
+provides=("$_realname-$_realver")
+install=filezilla.install
+conflicts=("$_realname")
+sources=('')
+md5sums=('')
+
+_svntrunk=https://filezilla.svn.sourceforge.net/svnroot/filezilla/FileZilla3/trunk
+_svnmod=filezilla
+
+
+build() {
+
+  cd $srcdir
+
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+
+  cp -r $_svnmod $_svnmod-build >/dev/null 2>&1
+  cd $_svnmod-build
+  
+  ./autogen.sh 
+  ./configure --prefix=/usr --disable-manualupdatecheck
+
+  make
+  make DESTDIR="$pkgdir" install
+
+  rm -r $srcdir/$_svnmod-build
+}

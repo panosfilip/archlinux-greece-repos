@@ -1,0 +1,90 @@
+Amarok ChangeLog
+================
+(C) 2002-2010 the Amarok authors.
+
+
+VERSION 2.4-Beta 1
+  FEATURES:
+    * LyricsApplet: the lyrics in are now updated when they were changed in a
+      different place (for example in TagDialog). Conflicts have to be resolved
+      by the user (therefore a message is shown which asks the user which changes
+      should be kept).
+    * Permit the use of iPod Touch 3G and possibly newer devices. Thanks to
+      Aurélien Croc for the patch!
+    * Match space-separated search terms in the playlist filter var individually. Thanks
+      Thomas Karpiniec for the patch!
+    * Added new context applet for displaying song tab information. Thanks
+      Rainer Sigle for the patch!
+    * Added ability to set/update Album Artist.
+    * Added map view and calendar in the upcoming events applet.
+    * Added support for all Wikipedia languages. (BR 220617)
+    * Added incremental search in the Wikipedia applet (press
+      '/' or global search key when in focus).
+    * Added "Favorite Venues" to the upcoming events applet.
+    * Read MusicBrainz IDs of MP4 files during scanning.
+    * Ability to hide and show the menu bar. Patch by 
+      Valentyn Pavliuchenko <valentyn.pavliuchenko@gmail.com>.
+    * Size of OSD font is now configurable. (BR 195186)
+    * Musicbrainz-based mass tagging UI by Sergey Ivanov.
+    * New easy to use table-based UI for Ampache server configuration. (BR 200703)
+    * OPML export for podcast subscriptions. (BR 126120)
+    * New "Playlist Length" constraint for the APG, which allows you to specify
+      the number of tracks in the playlist.  What was the "Playlist Length "
+      constraint is now called "Playlist Duration".
+    * MPRIS2 support for controlling Amarok over D-Bus.
+    * New "Playdar Collection" allows searching for and listening
+      to music provided by a running local Playdar service.
+
+  CHANGES:
+    * Tracks might contain lyrics in the HTML format, where there's no user-visible
+      content in the HTML. Those lyrics are now regarded as "empty".
+    * LyricsApplet: changed the layout of the "Do you really want to refetch lyrics"
+      message.
+    * Current track applet: added "show in media sources" actions for current
+      track's artist, album, composer, genre, and year if available.
+    * Current track applet: added action to open the tag dialog.
+    * Improved appearance of current track applet when playback is stopped.
+    * Better scrolling in the applet explorer.
+    * The default moodbar style now uses system colors.
+    * Added tray icon context-menu action to open the preferences dialog.
+    * Show a progress bar while loading pages in the Wikipedia applet.
+    * Added option to right-align "year" in the albums applet.
+    * Improved alignment of tracks in the albums applet.
+    * Scroll to the current album and make its tracks visible in the albums
+      applet. (BR 187011)
+    * Added ability to expand/collapse/drag disc items in the albums applet.
+      (BR 249488)
+    * Improved appearance of similar artist, upcoming events, and Wikipedia
+      applets.
+    * Improved presentation of suggested lyrics (currently only 3rd party
+      scripts use).
+    * Use QTooltip for playlist tooltips
+    * Changed playlist delegate margins and inline editor formating.
+    * Add "Added This Hour" filter preset to the collection brower widget.
+    * Bumped KDE dependency to version 4.4., and Qt dependency to 4.6.
+    * Print message when a file can't be copied to a media player.
+      Patch by Sergey Ivanov <123kash@gmail.com>. (BR 203820)
+    * Improved the usability of device items in Media Sources by adding tooltips.
+    * Deleting items in the collection/file browser will move them to trash;
+      pressing SHIFT while clicking the action will bypass trash.
+
+  BUGFIXES:
+    * Title labels incorrectly used the text color from the plasma theme.
+      This caused trouble with the fixed plasma theme and light color schemes.
+    * Fixed a data-loss bug where the user could lose changes he made to the current
+      track's lyrics. (BR 207621)
+    * Fixed covers of Ampache tracks not available through DBus
+    * Scanning stale and orphaned songs on iPod results in song duplication. (BR 235696)
+    * Applets' settings dialogs were partly untranslatable. (BR 255971)
+    * Fixed append&play action. Thanks Pieter van der Kloet for the patch. (BR 229706)
+    * Don't ignore the "use relative path" checkbox in the playlist export dialog.
+      (BR 250689)
+    * Fixed applet explorer getting stuck. (BR 253058)
+    * Fixed Wikipedia applet header layout issues. (BR 215171)
+    * Fixed truncated heading in albums applet. (BR 231001)
+    * Playlist sorting breadcrumb items have been untranslatable.
+      Patch by Alexander Potashev <aspotashev@gmail.com>. (BR 189750)
+    * Dynamic Playlist criteria were not being saved properly. (BR 243562)
+    * Collection Browser should show Artist names for Compilation Albums. (BR
+      252790)
+    * When Amarok starts and "Continue playing when Amarok is started" is selected,

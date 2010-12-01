@@ -1,0 +1,23 @@
+# Contributor: ranger @ adslgr.com
+pkgname=yawp-plasmoid 
+realname=yawp
+pkgver=0.3.2
+pkgrel=1
+pkgdesc="Yet Another Weather Plasmoid" 
+groups=('adslgr-plasmoids')
+arch=('i686' 'x86_64') 
+url="http://www.kde-look.org/content/show.php?content=94106" 
+depends=('kdebase-workspace>=4.3.0') 
+makedepends=('cmake' 'automoc4') 
+source=("http://downloads.sourceforge.net/${realname}/${realname}-${pkgver}.tar.bz2") 
+license=('GPL') 
+
+
+build() {
+  cd $srcdir/$realname-$pkgver
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release 
+  make VERBOSE=1
+  make DESTDIR=$pkgdir install
+}
+
+md5sums=('ba4941e81e61086ccec06584f7ae98dd')

@@ -1,0 +1,34 @@
+# Contributor: ranger @ adslgr.com
+ pkgname=kmess-svn
+ pkgver=5828
+ pkgrel=1
+ pkgdesc="A full-featured MSN Client for KDE - Development version"
+ url="http://www.kmess.org/"
+ arch=(i686 x86_64)
+ license=("GPL")
+ #options=('force')
+ depends=("kdelibs>=4.0" "qca-ossl")
+ makedepends=("cmake" "subversion" "automoc4")
+ provides=("kmess")
+ conflicts=("kmess" "kmess2")
+ 
+ _svntrunk=http://kmess.svn.sourceforge.net/svnroot/kmess/branches/kmess/kmess-2.0.x
+ _svnmod=kmess-svn
+ 
+ build() {
+ rm ${startdir}/ChangeLog
+ cd ${srcdir}
+ msg "Connecting to $_svnmod SVN server...."
+ svn co $_svntrunk $_svnmod -r $pkgver
+ [ -d ./$_svnmod-build ] && rm -fr ./$_svnmod-build
+ head -n40 ./$_svnmod/ChangeLog >> ${startdir}/ChangeLog
+ cp -r ./$_svnmod ./$_svnmod-build
+ cd ./$_svnmod-build
+ msg "SVN checkout done or server timeout"
+ msg "Starting make..."
+ 
+ #./autogen.sh
+ cmake -DCMAKE_INSTALL_PREFIX=/usr
+ make
+ make DESTDIR=${pkgdir} install
+ }

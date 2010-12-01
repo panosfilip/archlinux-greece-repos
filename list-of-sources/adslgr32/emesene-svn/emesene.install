@@ -1,0 +1,16 @@
+post_install() {
+cat << _EOF
+==> Installation notes:
+    * Spell-check plugin need 'gnome-python-extras', 'gtkspell' and a working
+      aspell (including dictionaries).
+    * Wink preview plugin need 'cabextract'
+_EOF
+}
+
+post_upgrade() {
+	post_install
+}
+
+op=$1
+shift
+$op $*

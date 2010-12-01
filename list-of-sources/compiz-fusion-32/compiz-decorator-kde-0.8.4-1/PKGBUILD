@@ -1,0 +1,43 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-decorator-kde
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Decorator of Compiz for KDE 4.x"
+url="http://www.go-compiz.org/"
+license=('GPL2' 'LGPL2' 'MIT')
+arch=('i686' 'x86_64')
+groups=('compiz-fusion-new' 'compiz-fusion-kde-new')
+depends=('kdebase-workspace>=4.3.0' "compiz-core>=${pkgver}")
+makedepends=('libgl' 'perlxml' 'intltool>=0.23')
+options=(!libtool !emptydirs)
+conflicts=('compiz-git' 'compiz-decorator-kde-git')
+source=(http://releases.compiz.org/core/compiz-${pkgver}.tar.bz2)
+md5sums=('03fa78ce0c464f3a413b2a3b74f09559')
+
+build()
+{
+  cd ${srcdir}/compiz-${pkgver}
+
+  ./configure --prefix=/usr \
+	    --disable-gnome \
+	    --disable-librsvg \
+	    --disable-metacity \
+	    --disable-gtk \
+	    --disable-gconf \
+	    --disable-dbus \
+	    --disable-annotate \
+	    --disable-place \
+	    --disable-glib \
+	    --disable-kde \
+            --enable-kde4
+
+  make
+  make DESTDIR=${pkgdir} install
+
+  # Let's remove stuff that are in compiz-core package
+  rm -rf ${pkgdir}/usr/{include,lib}
+  rm -rf ${pkgdir}/usr/bin/compiz
+  rm -rf ${pkgdir}/usr/share
+}
+

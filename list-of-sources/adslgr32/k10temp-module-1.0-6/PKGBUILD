@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=k10temp-module
+pkgver=1.0
+pkgrel=6
+pkgdesc="Kernel module for k10 temperature monitoring with lm_sensors"
+arch=('i686' 'x86_64')
+sourcetarballdir=http://adslgr64.tiven.org/sources
+depends=('kernel26>=2.6.32.3' 'kernel26<2.6.33' 'lm_sensors>=3.1.1')
+makedepends=('kernel26-headers>=2.6.32.3' 'kernel26-headers<2.6.33')
+install=k10temp-module.install
+license=('GPLv2')
+url="http://www.lm-sensors.org/"
+makedepends=('kernel26-headers')
+source=(${sourcetarballdir}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('90883316d22dd15a55bb22da2a019398')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make KDIR=/usr/src/linux-`uname -r`
+  mkdir -p ${pkgdir}/lib/modules/`uname -r`/kernel/drivers/hwmon/
+  install -m644 k10temp.ko ${pkgdir}/lib/modules/`uname -r`/kernel/drivers/hwmon/
+}
+

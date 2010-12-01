@@ -1,0 +1,21 @@
+------------------------------------------------------------------------
+r1075193 | janlepper | 2010-01-15 18:51:26 +0200 (Fri, 15 Jan 2010) | 1 line
+
+ListPanelFunc::refreshActions(): only refresh if panel is active
+------------------------------------------------------------------------
+r1075100 | janlepper | 2010-01-15 16:55:59 +0200 (Fri, 15 Jan 2010) | 1 line
+
+PanelManager::slotRecreatePanels(): restore properties after recreating panel
+------------------------------------------------------------------------
+r1075081 | janlepper | 2010-01-15 16:28:07 +0200 (Fri, 15 Jan 2010) | 1 line
+
+save in config wether previews are shown
+------------------------------------------------------------------------
+r1075058 | janlepper | 2010-01-15 15:22:10 +0200 (Fri, 15 Jan 2010) | 1 line
+
+FIXED: [ 2907607 ] crash while closing
+------------------------------------------------------------------------
+r1073975 | janlepper | 2010-01-13 13:01:21 +0200 (Wed, 13 Jan 2010) | 1 line
+
+svnnews desription for new thumbnail feature
+

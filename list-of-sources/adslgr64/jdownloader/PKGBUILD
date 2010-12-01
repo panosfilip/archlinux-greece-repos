@@ -1,0 +1,50 @@
+# Maintainer: Jedipottsy <Richard@mythreed.com>
+# Maintainer: Thoughtcrime
+# Maintainer: VuDu
+# 
+# This package will not be updated at all
+# (except if the jd.sh script gets changed), 
+# because JDownloader has a hell lot of hoster
+# plugins which get updated about daily.
+# For that reason, we use its own updater.
+# I've talked on #jdownloader and this is the way
+# it makes sense.
+#
+# Please note that everytime a different user
+# executes 'jdownloader', first the updater
+# will be downloaded and then the whole JD. This
+# takes time!
+# - Thoughtcrime
+
+pkgname=jdownloader
+pkgver=0.7
+pkgrel=10
+pkgdesc="Java based download manager, that also handles 1click-hosters. Uses its own updater!"
+arch=('any') #Java!
+url="http://jdownloader.org/"
+license=('GPL')
+depends=('java-runtime>=1.5' 'wget' 'bash')
+provides=('jdownloader')
+
+# jdownloader.png taken from:
+# http://jdownloader.org/_media/knowledge/wiki/jdownloader.png
+# resized to 128x128 with GIMP, original size is 512x512
+source=(http://212.117.163.148/jd.sh \
+jdownloader.png \
+jdownloader.desktop)
+
+md5sums=('5be66194f939c9c060db6c061c09b421'
+         'f783069d119a305b0836a3b03bbb799b'
+         '0ae072d5f48db00ae5f34386b6e91762')
+
+
+build() {
+	install -d $pkgdir/usr/bin
+	cp $srcdir/jd.sh $pkgdir/usr/bin/jdownloader
+	chmod +x $pkgdir/usr/bin/jdownloader
+	
+	install -d $pkgdir/usr/share/applications
+	install -d $pkgdir/usr/share/pixmaps
+	cp $srcdir/jdownloader.desktop $pkgdir/usr/share/applications/
+	cp $srcdir/jdownloader.png $pkgdir/usr/share/pixmaps/
+}

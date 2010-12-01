@@ -1,0 +1,28 @@
+pkgname=python-qscintilla-dev
+realname=QScintilla
+filename=qscintilla
+pkgver=2.3.2
+pkgdate=20081101
+pkgrel=2
+pkgdesc="Python bindings for QScintilla2.  This is the latest development snapshot."
+arch=('i686' 'x86_64')
+url="http://www.riverbankcomputing.co.uk/qscintilla"
+license=('GPL3')
+provides=('python-qscintilla=2.3.2')
+depends=('pyqt-dev>=4.4.4' 'qscintilla-dev>=2.3.2')
+conflicts=('python-qscintilla' 'python-qscintilla2')
+replaces=('python-qscintilla2')
+options=(!emptydirs)
+#source=(http://riverbankcomputing.com/static/Downloads/${realname}2/${realname}-gpl-${pkgver}-snapshot-${pkgdate}.tar.gz)
+source=(http://riverbankcomputing.com/static/Downloads/${realname}2/${realname}-gpl-${pkgver}.tar.gz)
+
+md5sums=('2e112d01988f2e044c43a1e7f5e1dd87')
+
+build() {
+	cd $srcdir/QScintilla-gpl-$pkgver/Python
+
+	# Build
+	python configure.py
+	make
+	make DESTDIR=$pkgdir install
+}

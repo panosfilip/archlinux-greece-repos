@@ -1,0 +1,32 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=subtitlecomposer
+pkgver=0.5.3
+pkgrel=2
+pkgdesc="A KDE subtitle editor"
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/subcomposer"
+license=('GPL')
+depends=('kdelibs' 'gettext' 'mplayer')
+makedepends=('cmake' 'automoc4')
+source=(http://downloads.sourceforge.net/subcomposer/${pkgname}-${pkgver}.tar.bz2
+	subtitlecomposer-linkage-patch.patch)
+md5sums=('f660ed2ce4490a8705c883a9c57e39e5'
+	 '52f34a999fee2720b0197b5bff7ed785')
+
+# Many thanks for the patch to the Gentoo guys.
+# http://packages.gentoo.org/package/media-video/subtitlecomposer
+
+build()
+{
+	cd ${srcdir}/${pkgname}-${pkgver}
+
+	patch -Np2 -i "${srcdir}/subtitlecomposer-linkage-patch.patch"
+
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+	make
+	make DESTDIR=${pkgdir} install
+}
+

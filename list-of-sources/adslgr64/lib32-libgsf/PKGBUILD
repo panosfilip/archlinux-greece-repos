@@ -1,0 +1,21 @@
+# Contributor: DonVla <donvla@users.sourceforge.net>
+# Maintainer: ranger @ adslgr.com
+
+pkgname=lib32-libgsf
+pkgver=1.14.16
+pkgrel=1
+_pkgrel32=1
+_downloadurl=ftp://ftp.hosteurope.de/mirror/ftp.archlinux.org
+pkgdesc="The GNOME Structured File Library is a utility library for reading and writing structured file formats."
+arch=('x86_64')
+url="http://www.gnome.org/"
+license=('GPL' 'LGPL')
+depends=('lib32-glib2' 'lib32-libxml2' 'lib32-bzip2')
+groups=('lib32')
+source=(${_downloadurl}/extra/os/i686/${pkgname/lib32-/}-${pkgver}-${_pkgrel32}-i686.pkg.tar.gz)
+md5sums=('93ccaa4d12df67821b4e58de12a96fcf')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/lib
+  cp -rPf ${srcdir}/usr/lib/*.so* ${pkgdir}/opt/lib32/usr/lib
+}

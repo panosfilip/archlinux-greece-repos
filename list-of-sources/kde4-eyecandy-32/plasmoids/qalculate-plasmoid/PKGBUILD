@@ -1,0 +1,23 @@
+# Contributor: ranger @ adslgr.com
+pkgname=qalculate-plasmoid 
+realname=qalculate_applet
+pkgver=0.7.2
+pkgrel=1
+pkgdesc="A calculator plasmoid" 
+groups=('adslgr-plasmoids')
+arch=('i686' 'x86_64') 
+url="http://wwwu.uni-klu.ac.at/magostin/qalculate.html" 
+depends=('kdebase-workspace>=4.3.0' 'libqalculate') 
+makedepends=('cmake' 'automoc4') 
+conflicts=('plasma-runcommand-plasmoid')
+source=("http://wwwu.uni-klu.ac.at/magostin/src/${realname}-${pkgver}.tar.gz") 
+license=('GPL') 
+md5sums=('c022a94e391c8c6581214ee108d8962b')
+
+
+build() {
+  cd $srcdir/$realname-$pkgver
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release 
+  make VERBOSE=1
+  make DESTDIR=$pkgdir install
+}

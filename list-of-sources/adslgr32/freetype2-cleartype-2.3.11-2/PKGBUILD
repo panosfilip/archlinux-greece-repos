@@ -1,0 +1,43 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=freetype2-cleartype
+pkgver=2.3.11
+pkgrel=2
+realname=freetype2
+pkgdesc="TrueType font rendering library with cleartype patch"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://freetype.sourceforge.net"
+depends=('zlib')
+replaces=('freetype2' 'freetype2-lcd' 'freetype2-ubuntu')
+conflicts=('freetype2' 'freetype2-lcd' 'freetype2-ubuntu')
+provides=("freetype2=${pkgver}")
+groups=('font-rendering-cleartype')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
+        freetype-2.2.1-subpixel-disable-quantization.patch
+        bytecode.patch
+        freetype-2.3.0-enable-spr.patch
+        freetype-2.2.1-enable-valid.patch
+        freetype-2.2.1-memcpy-fix.patch)
+md5sums=('519c7cbf5cbd72ffa822c66844d3114c'
+         '70d23f3557750c0503689d3314958d89'
+         '9ff19e742968c29e3ba52b08d6bf0a50'
+         '816dc8619a6904a7385769433c0a8653'
+         '214119610444c9b02766ccee5e220680'
+         '6fb6606d28082ecb8e0c6d986b0b26aa')
+
+build() {
+  cd "${srcdir}/freetype-${pkgver}"
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-subpixel-disable-quantization.patch"
+  patch -Np0 -i "${srcdir}/bytecode.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.3.0-enable-spr.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-memcpy-fix.patch"
+
+  ./configure --prefix=/usr
+  make
+  make DESTDIR="${pkgdir}" install
+  rm -f ${pkgdir}/usr/lib/*.la
+}
+

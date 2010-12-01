@@ -1,0 +1,33 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=libxft-cleartype
+pkgver=2.1.14
+pkgrel=1
+pkgdesc="FreeType-based font drawing library for X with cleartype patch"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('fontconfig>=2.6.0' 'libxrender' 'sh')
+makedepends=('pkg-config')
+replaces=('libxft' 'libxft-lcd' 'libxft-ubuntu')
+conflicts=('libxft' 'libxft-lcd' 'libxft-ubuntu')
+provides=("libxft=${pkgver}")
+groups=('font-rendering-cleartype')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2
+        libXft-2.1.14-lcd-cleartype.patch)
+md5sums=('254e62a233491e0e1251636536163e20'
+         '3a7fcbe1aeb5a20eb20810332622f78f')
+
+build() {
+  cd ${srcdir}/libXft-${pkgver}
+
+  patch -Np1 -i ${srcdir}/libXft-2.1.14-lcd-cleartype.patch
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static
+  make
+  make DESTDIR=${pkgdir} install
+  install -d -m755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/
+}
+

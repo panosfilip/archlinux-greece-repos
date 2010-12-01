@@ -1,0 +1,20 @@
+# Contributor: Stefan Clarke <fm0nk3y@yahoo.co.uk>
+pkgname=h264enc
+pkgver=8.4.6
+pkgrel=1
+pkgdesc="Advanced shell script for encoding DVDs or video files to the H.264 format using the encoding utility MEncoder from MPlayer."
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/h264enc/"
+license=('GPL')
+depends=('mplayer' 'x264' 'lsdvd' 'lame' 'bc')
+install=${pkgname}.install
+source=(http://switch.dl.sourceforge.net/sourceforge/h264enc/${pkgname}-${pkgver}.tar.gz)
+md5sums=('a0e26edde691b8910088e55950643c49')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  sed -i -e "s|/usr/local|${pkgdir}/usr|g" \
+        -e 's|usr/local/|usr/|g' install
+  ./install
+}
+

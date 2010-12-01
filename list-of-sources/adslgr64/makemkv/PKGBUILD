@@ -1,0 +1,34 @@
+pkgname=makemkv
+pkgver=1.6.2
+pkgrel=1
+pkgdesc="software to convert blu-ray and dvd to mkv"
+arch=('i686' 'x86_64')
+url="http://www.makemkv.com"
+license=('LGPL' 'MPL' 'custom')
+depends=(qt)
+install=makemkv.install
+source=(${url}/download/${pkgname}_v${pkgver}_bin.tar.gz
+        ${url}/download/${pkgname}_v${pkgver}_oss.tar.gz)
+md5sums=('8bb6133c161d63e2bfdae2106babd693'
+         '33f9c56f46ab4eca2a54f180c4a6e66b')
+
+build() {
+  cd $srcdir/${pkgname}_v${pkgver}_oss
+
+  make -f makefile.linux
+
+  install -d $pkgdir/usr/lib
+  install -t $pkgdir/usr/lib out/libdriveio.so.0 out/libmakemkv.so.1
+  install -D out/makemkv $pkgdir/usr/bin/makemkv
+
+  cd $srcdir/${pkgname}_v${pkgver}_bin
+
+  if [ "$CARCH" = "x86_64" ]; then
+    install -D bin/amd64/makemkvcon $pkgdir/usr/bin/makemkvcon
+  else
+    install -D bin/i386/makemkvcon $pkgdir/usr/bin/makemkvcon
+  fi
+
+  install -Dm 644 src/eula_en_linux.txt $pkgdir/usr/share/licenses/$pkgname/eula_en_linux.txt
+}
+

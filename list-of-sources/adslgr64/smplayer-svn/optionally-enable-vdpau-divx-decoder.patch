@@ -1,0 +1,54 @@
+diff -Naur old/smplayer/src/core.cpp new/smplayer/src/core.cpp
+--- old/smplayer/src/core.cpp	2010-06-06 16:05:51.000000000 +0300
++++ new/smplayer/src/core.cpp	2010-06-06 16:22:27.353458057 +0300
+@@ -1357,7 +1357,11 @@
+ 	else {
+ 		if (pref->vo.startsWith("vdpau")) {
+ 			proc->addArgument("-vc");
+-			proc->addArgument("ffh264vdpau,ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,");
++                        	if (pref->disable_vdpau_divx_decoder) {
++                        		proc->addArgument("ffh264vdpau,ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,");
++                        	} else {
++                        		proc->addArgument("ffh264vdpau,ffmpeg12vdpau,ffodivxvdpau,ffwmv3vdpau,ffvc1vdpau,");
++                        	}
+ 		}
+ #endif	
+ 		else {
+diff -Naur old/smplayer/src/preferences.cpp new/smplayer/src/preferences.cpp
+--- old/smplayer/src/preferences.cpp	2010-06-06 16:05:51.000000000 +0300
++++ new/smplayer/src/preferences.cpp	2010-06-06 16:18:30.243831503 +0300
+@@ -101,6 +101,7 @@
+ 
+ #ifndef Q_OS_WIN
+ 	disable_video_filters_with_vdpau = true;
++	disable_vdpau_divx_decoder = true;
+ #endif
+ 
+ 	use_soft_vol = true;
+@@ -504,6 +505,7 @@
+ 
+ #ifndef Q_OS_WIN
+ 	set->setValue("disable_video_filters_with_vdpau", disable_video_filters_with_vdpau);
++	set->setValue("disable_vdpau_divx_decoder", disable_vdpau_divx_decoder);
+ #endif
+ 
+ 	set->setValue("use_soft_vol", use_soft_vol);
+@@ -917,6 +919,7 @@
+ 
+ #ifndef Q_OS_WIN
+ 	disable_video_filters_with_vdpau = set->value("disable_video_filters_with_vdpau", disable_video_filters_with_vdpau).toBool();
++	disable_vdpau_divx_decoder = set->value("disable_vdpau_divx_decoder", disable_vdpau_divx_decoder).toBool();
+ #endif
+ 
+ 	use_soft_vol = set->value("use_soft_vol", use_soft_vol).toBool();
+diff -Naur old/smplayer/src/preferences.h new/smplayer/src/preferences.h
+--- old/smplayer/src/preferences.h	2010-06-06 16:05:51.000000000 +0300
++++ new/smplayer/src/preferences.h	2010-06-06 16:15:10.823952535 +0300
+@@ -98,6 +98,7 @@
+ 
+ #ifndef Q_OS_WIN
+ 	bool disable_video_filters_with_vdpau;
++	bool disable_vdpau_divx_decoder;
+ #endif
+ 
+ 	// Audio

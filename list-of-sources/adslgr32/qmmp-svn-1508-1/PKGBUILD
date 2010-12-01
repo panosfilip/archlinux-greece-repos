@@ -1,0 +1,33 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=qmmp-svn
+realname=qmmp
+pkgver=1508
+lateststablever=0.4
+pkgrel=1
+pkgdesc="Qt4 based audio-player"
+arch=('i686' 'x86_64')
+tarname=qmmp-svn
+sourcetarballdir=http://adslgr64.tiven.org/sources
+url="http://qmmp.ylsoftware.com/index_en.php"
+license=('GPL')
+depends=('alsa-lib>=1.0.1' 'bzip2' 'curl>=7.16' 'gzip' 'libmad' 'libvorbis' 'libogg'
+	 'qt>=4.5' 'taglib>=1.6' 'tar' 'unzip' 'flac>=1.1.3' 'libmpcdec>=1.2.6'
+	 'ffmpeg>=20100108' 'libsamplerate>=0.1.2' 'libmodplug>=0.8.4'
+	 'libsndfile>=1.0.17' 'wavpack>=4.41' 'jack-audio-connection-kit>=0.102.5'
+	 'xdg-utils' 'libbs2b>=3.0.0' 'ladspa>=1.13' 'projectm>=1.2.0')
+makedepends=('cmake>=2.4.8')
+replaces=('qmmp')
+conflicts=('qmmp' 'qmmp-fixed')
+provides=("qmmp=${lateststablever}" "qmmp-svn=${pkgver}")
+source=(${sourcetarballdir}/${tarname}-${pkgver}.tar.bz2)
+md5sums=('9bba12e4ab78bdbd8b5057bd1f13b698')
+
+build() {
+  cd ${srcdir}/trunk/qmmp
+
+  cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RELEASE
+  make
+  make DESTDIR=${pkgdir} install
+}
+

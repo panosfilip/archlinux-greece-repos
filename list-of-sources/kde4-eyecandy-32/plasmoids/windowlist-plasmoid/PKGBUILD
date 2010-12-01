@@ -1,0 +1,24 @@
+# Contributor: ranger @ adslgr.com
+pkgname=windowlist-plasmoid
+realname=windowlist
+pkgver=3.1
+pkgrel=1
+pkgdesc="Simple plasmoid to show list of opened windows."
+groups=('adslgr-plasmoids')
+arch=('i686' 'x86_64')
+url="http://www.kde-look.org/content/show.php/Window+List?content=96486"
+depends=('kdebase-workspace>=4.3.0')
+makedepends=('cmake' 'automoc4' 'gcc')
+replaces=("windowslist-plasmoid")
+conflicts=("plasmoid-windowlist")
+source=("http://www.kde-look.org:80/CONTENT/content-files/96486-${realname}-${pkgver}.tar.bz2")
+license=('GPL')
+md5sums=('8e122db01cef402e70c543beb3646b99')
+
+
+build() {
+  cd $srcdir/${realname}-${pkgver}
+	cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RELEASE
+	make VERBOSE=1
+        make DESTDIR=$pkgdir install
+}

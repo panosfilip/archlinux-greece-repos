@@ -1,0 +1,20 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=lib32-curl
+pkgver=7.18.2
+pkgrel=1
+pkgrel32=1
+pkgdesc="An URL retrival utility and library"
+arch=('x86_64')
+url="http://curl.haxx.se"
+depends=('lib32-openssl')
+license=('MIT')
+groups=lib32
+source=(http://joel.diasmarques.free.fr/arch/lib32-curl/${pkgname/lib32-/}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz)
+md5sums=('eb9dab6689edcb2ac9e30d613d1efe8d')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/
+  cp -rPf ${srcdir}/usr/lib ${pkgdir}/opt/lib32/usr
+}
+

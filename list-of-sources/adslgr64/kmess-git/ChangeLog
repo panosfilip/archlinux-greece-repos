@@ -1,0 +1,40 @@
+2010-11-16 (Adam)
+ * (Finally) merged in a modified patch by Timo Tambet that groups all
+   "contact added user" windows as tabs under a single dialog.
+
+--- 2.0.5 released ---
+
+2010-10-23 (Valerio)
+ * Added new chats to the log records, no need to logout to see the chat logs of
+   the current session anymore.
+ * Made the HTTP connection timer fix from yesterday to compile with Qt < 4.7.
+ * Fixed building with certain compiler configurations.
+
+2010-10-22 (Valerio)
+ * Show user's display picture in chat by default.
+ * Fixed HTTP connection timers, now midnight and clock skews don't cause any
+   more the HTTP rate limiter to fail.
+
+2010-10-16 (Valerio)
+ * Integrated Chat History with the Chat Window:
+   - added a menu item and toolbar action, showing a menu containing the current
+     tab's contacts;
+   - added a context menu entry in the Contacts Panel.
+ * Removed some unused code in ContactFrame.
+ * Fixed logging in with long passwords (17+ characters). The Live servers don't
+   accept those, hehehe.
+
+2010-10-16 (Adam)
+ * Fix the parsing of offline IM messages.
+
+2010-09-19 (Adam)
+ * Fix a signal issue in MsnNotificationConnection, thanks Timo Tambet
+
+2010-09-10 (Pano)
+ * Merged an updated Traditional Chinese translation by Yen-chou Chen.
+
+2010-09-03 (Adam)
+ * Fix a crash caused when the contacts widget was deleted twice in a chat window.
+
+2010-09-02 (Sjors)
+ * Add <html> tag to status notification messages so HTML is stripped correctly

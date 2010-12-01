@@ -1,0 +1,12 @@
+------------------------------------------------------------------------
+r3409 | rvm | 2010-01-18 14:21:50 +0200 (Mon, 18 Jan 2010) | 4 lines
+
+Don't return the first item of the vo and ao comboboxes if the user 
+defined string is empty (just return an empty string).
+
+
+------------------------------------------------------------------------
+r3408 | rvm | 2010-01-18 14:07:09 +0200 (Mon, 18 Jan 2010) | 3 lines
+
+Partially reverting r3401. Now smplayer doesn't use any audio driver as default. Let mplayer choose.
+

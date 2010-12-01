@@ -1,0 +1,21 @@
+pkgname=rootactions-servicemenu-kde4
+pkgver=2.4
+pkgrel=2
+pkgdesc="allows admin users to perform several root only actions from dolphin via kdesu"
+arch=('i686' 'x86_64')
+url="http://www.kde-apps.org/content/show.php?content=48411"
+license=('GPL')
+depends=('kdebase' 'perl')
+source=(http://www.kde-apps.org/CONTENT/content-files/48411-rootactions_servicemenu_$pkgver.tar.gz rootactions-servicemenu.patch)
+md5sums=('1c22a8e790c149821ba5f1ed95d19484' '911393497e5ef74c49c5e485a55a222f')
+
+
+build() {
+	cd $srcdir/Root_Actions_$pkgver/dolphin-KDE4/
+        mkdir -p $pkgdir/usr/share/kde4/services/ServiceMenus/
+	install -m755 *.desktop $pkgdir/usr/share/kde4/services/ServiceMenus/
+        cd $srcdir/Root_Actions_$pkgver
+        patch -p1 < $srcdir/rootactions-servicemenu.patch      
+	install -Dm755 rootactions-servicemenu.pl $pkgdir/usr/bin/rootactions-servicemenu.pl
+} 
+

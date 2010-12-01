@@ -1,0 +1,27 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=emerald-themes
+pkgver=20091015
+pkgrel=2
+pkgdesc="Themes for emerald"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+tarname=emerald-themes
+sourcetarballdir=http://adslgr64.tiven.org/sources
+depends=("emerald>=0.8.4")
+makedepends=('intltool' 'pkg-config')
+groups=('compiz-fusion-new' 'compiz-fusion-kde-new' 'compiz-fusion-gtk-new')
+conflicts=('emerald-themes-git')
+source=(${sourcetarballdir}/${tarname}-${pkgver}.tar.xz)
+md5sums=('f2992be84c7f3a8895df91dbc0247554')
+
+build() {
+  cd ${srcdir}/${pkgname}
+  ./autogen.sh
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

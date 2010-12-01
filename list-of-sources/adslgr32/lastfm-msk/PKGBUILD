@@ -1,0 +1,137 @@
+# Contributor: grimi <grimi@poczta.fm>
+
+pkgname=lastfm-msk
+pkgver=1.5.1.31879.dfsg.3
+oriver=1.5.1.31879
+pkgrel=1
+pkgdesc="The Last.fm client with msk patchset"
+arch=('i686' 'x86_64')
+url="http://www.mehercule.net/staticpages/index.php/lastfm"
+license=('GPL')
+depends=('alsa-lib' 'libsm' 'libgpod' 'libmad' 'qt>=4.3')
+makedepends=('patch')
+provides=('lastfm-client')
+conflicts=('lastfm-client')
+install=lastfm-msk.install
+source=("http://cdn.last.fm/client/src/last.fm-${oriver}.tar.bz2" \
+        "http://www.mehercule.net/lastfm/build-fixes.diff" \
+	"http://www.mehercule.net/lastfm/reduce-linkage.diff" \
+	"http://www.mehercule.net/lastfm/gcc-4.3.patch" \
+        "http://www.mehercule.net/lastfm/no-fingerprint-lib.diff" \
+	"http://www.mehercule.net/lastfm/alsa-uses-qdebug.diff" \
+        "http://www.mehercule.net/lastfm/check-soundcard-errors.diff" \
+        "http://www.mehercule.net/lastfm/tray-icon-size.diff" \
+	"http://www.mehercule.net/lastfm/hide-scrobbledir-option.diff" \
+        "http://www.mehercule.net/lastfm/hide-crashreport-option.diff" \
+        "http://www.mehercule.net/lastfm/tray-volume.diff" \
+        "http://www.mehercule.net/lastfm/set-locale.diff" \
+        "http://www.mehercule.net/lastfm/cheaper-save-geometry.diff" \
+	"http://www.mehercule.net/lastfm/set-firstrun-status.diff" \
+	"http://www.mehercule.net/lastfm/qt45.diff" \
+	"http://www.mehercule.net/lastfm/dirpaths.diff" \
+        "http://www.mehercule.net/lastfm/icons.tar.gz" \
+        "http://www.mehercule.net/lastfm/trayicons22.tar.gz" \
+	"http://www.mehercule.net/lastfm/multi-sound.diff" \
+	"http://www.mehercule.net/lastfm/dbus.diff" \
+	"http://www.mehercule.net/lastfm/tag-cloud.diff" \
+	"http://www.mehercule.net/lastfm/browser-select.diff" \
+	"http://www.mehercule.net/lastfm/no-cruft.diff" \
+        "lastfm.desktop" "lastfm.protocol")
+
+build() {
+
+   cd ${srcdir}/last.fm-${oriver}
+
+   patch -Np1 -i ../build-fixes.diff
+   patch -Np1 -i ../reduce-linkage.diff
+   patch -Np1 -i ../gcc-4.3.patch
+   patch -Np1 -i ../no-fingerprint-lib.diff
+   patch -Np1 -i ../alsa-uses-qdebug.diff
+   patch -Np1 -i ../check-soundcard-errors.diff
+   patch -Np1 -i ../tray-icon-size.diff
+   patch -Np1 -i ../hide-scrobbledir-option.diff
+   patch -Np1 -i ../hide-crashreport-option.diff
+   patch -Np1 -i ../tray-volume.diff
+   patch -Np1 -i ../set-locale.diff
+   patch -Np1 -i ../cheaper-save-geometry.diff
+   patch -Np1 -i ../set-firstrun-status.diff
+   patch -Np1 -i ../qt45.diff
+   patch -Np1 -i ../dirpaths.diff
+
+   patch -Np1 -i ../multi-sound.diff
+   patch -Np1 -i ../dbus.diff
+   patch -Np1 -i ../tag-cloud.diff
+   patch -Np1 -i ../browser-select.diff
+   patch -Np1 -i ../no-cruft.diff
+
+   install -d ${pkgdir}/usr/{bin,share/applications,share/pixmaps,lib}
+   install -d ${pkgdir}/usr/share/lastfm/{icons,buttons,i18n,services}
+   install -d ${pkgdir}/usr/share/kde4/services
+ 
+   ./configure
+   
+   ( cd i18n && lrelease *.ts )
+
+   # Fix missing include (when gcc 4.4.0 is used)
+   sed -i 's/#include <cstdlib>/#include <cstdio>\n#include <cstdlib>/' src/output/RtAudio/rtaudio/RtAudio.cpp
+
+   MAKEFLAGS=-j1 make
+
+   install -m644 i18n/*.qm ${pkgdir}/usr/share/lastfm/i18n
+
+   install -m644 ${srcdir}/lastfm.protocol ${pkgdir}/usr/share/kde4/services
+   install -m644 ${srcdir}/lastfm.desktop ${pkgdir}/usr/share/applications
+   
+   cd bin
+
+   install -m755 last.fm ${pkgdir}/usr/share/lastfm
+   echo -e '#!/bin/sh\nexec /usr/share/lastfm/last.fm\n' > lastfm
+   install -m755 lastfm ${pkgdir}/usr/bin
+
+   install -m644 {libLastFmTools.so.1.0.0,libMoose.so.1.0.0} ${pkgdir}/usr/lib
+   cp -a libLastFmTools.so libLastFmTools.so.1 libLastFmTools.so.1.0 \
+         libMoose.so libMoose.so.1 libMoose.so.1.0 ${pkgdir}/usr/lib
+
+   install -m644 services/* ${pkgdir}/usr/share/lastfm/services
+ 
+   cd data
+   install -m644 about_generic.png app_55.png logo.png no*.gif \
+                 progress.mng progress_active.mng slider*.png \
+                 speaker*.png watermark.png wizard_generic.png \
+                 ${pkgdir}/usr/share/lastfm
+   
+   install -m644 buttons/*.png ${pkgdir}/usr/share/lastfm/buttons
+   install -m644 icons/*.png ${pkgdir}/usr/share/lastfm/icons
+   rm -f ${pkgdir}/usr/share/lastfm/icons/*profile24.png
+   install -m644 ${srcdir}/user_*22.png ${pkgdir}/usr/share/lastfm/icons
+   
+   install -m644 icons/as.png ${pkgdir}/usr/share/pixmaps/lastfm.png   
+
+   cp -a ${srcdir}/icons ${pkgdir}/usr/share/
+}
+
+md5sums=('21358960da6a68337c8afad79d268b5b'
+         'ae0e4a94af0d9e38172f064642a32e20'
+         '88321d06bc2f5255421d8748092e0ef3'
+         'ea16fb44f5b8859f8d351b04f83ae34c'
+         '5dd3c2ae81a0192f0028a449d8c2fc5e'
+         'fda1ffb80c23f1cc554fe262dbd2a3bb'
+         '5aec04a384d7074c15c9c9de0769551d'
+         '6e570bb832b3ed4683b3b28a53c1fd5c'
+         '3301aa04c88ee1a576be4dde97ccb3c5'
+         '4c1398c50ce3f1f137d626dd924f75ce'
+         'dc058e861a68d801348ad70f43a010dc'
+         '1aeec4db77dc7cbc8e4660f127485599'
+         '056a9f42b98e4710b0b132a7c1fe0fec'
+         '494d7c336b09c7d579dad3cc7d7bc627'
+         '3341568fa672c0952bccf753f6eb3f64'
+         '23b3429441c348c8fc119ed836dd7b23'
+         'fb450128e3e759d5ee5db8e2cd5f1d45'
+         'ad628454145b87babb8f164ff4b27b9b'
+         'e419e60f99ba1ce26f89acf9f797dade'
+         '653fd15e4c157ca991caad7895cb9d4f'
+         '6a10199232590123e0f53f74d5903eac'
+         'f71e0fc09042aedd767c7ed9d52f01d5'
+         '433df64c55b753960fcfaaaef99658fd'
+         'd0e5a0fb91180be4381f646f0eaa725c'
+         '8d40a2ec0c2d071d53759d1b08a5efb6')

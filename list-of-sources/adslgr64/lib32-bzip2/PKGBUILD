@@ -1,0 +1,22 @@
+# Contributor: Geoff Weber <janax99@yahoo.com>
+# Maintainer: ranger @ adslgr.com
+
+ pkgname=lib32-bzip2
+ pkgname32=${pkgname/lib32-/}
+ license='bzip2'
+ pkgver=1.0.5
+ pkgrel=4
+ pkgrel32=4
+ pkgdesc="A high-quality data compression program"
+ arch=(x86_64)
+ groups='lib32'
+ url="http://sources.redhat.com/bzip2"
+ depends=('lib32-glibc')
+ 
+ source=(ftp://ftp.archlinux.org/core/os/i686/${pkgname32}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz)
+ md5sums=('d46d86d36453c76b55b19ee91ff91c05')
+ 
+ build() {
+ mkdir -p $pkgdir/opt/lib32/lib/
+ cp -rPf $srcdir/lib $pkgdir/opt/lib32/
+ }

@@ -1,0 +1,26 @@
+# Contributor: ranger
+
+pkgname=smooth-tasks-plasmoid
+realname=smooth-tasks-src-wip
+pkgver=20091206
+realpkgver=2009-12-06
+pkgrel=2
+pkgdesc="Fork of STasks plasmoid" 
+groups=('adslgr-plasmoids')
+arch=('i686' 'x86_64') 
+url="http://www.kde-look.org/content/show.php?content=101586" 
+depends=('kdebase-workspace>=4.3.0') 
+makedepends=('cmake' 'automoc4') 
+conflicts=('smooth-tasks')
+source=(http://www.kde-look.org/CONTENT/content-files/101586-${realname}-${realpkgver}.tar.bz2)
+#source=("http://www.adslgr64.tiven.org/sources/${realname}-${pkgver}.tar.gz") 
+license=('GPL') 
+
+build() {
+  cd ${srcdir}/${realname}-${realpkgver}
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release 
+  make VERBOSE=1
+  make DESTDIR=${pkgdir} install
+}
+
+md5sums=('a9af58c3e9a639481d0d05266d572add')

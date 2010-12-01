@@ -1,0 +1,52 @@
+------------------------------------------------------------------------
+r30366 | ptt | 2010-01-18 12:44:30 +0200 (Mon, 18 Jan 2010) | 1 line
+
+synced with r30197
+------------------------------------------------------------------------
+r30365 | zuxy | 2010-01-18 10:42:04 +0200 (Mon, 18 Jan 2010) | 2 lines
+
+Define out currently unused static functions.
+
+------------------------------------------------------------------------
+r30364 | compn | 2010-01-18 05:55:16 +0200 (Mon, 18 Jan 2010) | 1 line
+
+add uldx and vspx fourcc to ffodivx in codecs.conf
+------------------------------------------------------------------------
+r30363 | zuxy | 2010-01-18 05:06:43 +0200 (Mon, 18 Jan 2010) | 2 lines
+
+Support for detection of AMD Phenom.
+
+------------------------------------------------------------------------
+r30362 | stefano | 2010-01-18 01:29:31 +0200 (Mon, 18 Jan 2010) | 2 lines
+
+Remove stray '\' at the end of macro definitions.
+
+------------------------------------------------------------------------
+r30361 | stefano | 2010-01-18 01:17:47 +0200 (Mon, 18 Jan 2010) | 2 lines
+
+Remove duplicated or pointless newlines.
+
+------------------------------------------------------------------------
+r30360 | stefano | 2010-01-18 01:07:37 +0200 (Mon, 18 Jan 2010) | 3 lines
+
+Factorize error message logging, log it if the converter cannot be
+set.
+
+------------------------------------------------------------------------
+r30359 | stefano | 2010-01-18 01:02:20 +0200 (Mon, 18 Jan 2010) | 2 lines
+
+Reindent after the last commit.
+
+------------------------------------------------------------------------
+r30358 | stefano | 2010-01-18 01:00:01 +0200 (Mon, 18 Jan 2010) | 5 lines
+
+Make the pal2rgbWrapper set and use the converter in pal2rgbWrapper
+only if the input format is paletted.
+
+Fix potential crashes/weirdness if the input format is non-paletted.
+
+------------------------------------------------------------------------
+r30357 | mru | 2010-01-17 21:26:35 +0200 (Sun, 17 Jan 2010) | 1 line
+
+Remove double const
+

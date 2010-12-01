@@ -1,0 +1,26 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compizconfig-backend-kconfig
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compizconfig backend for KDE 4.x"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("libcompizconfig>=${pkgver}" 'kdebase-workspace>=4.3.0')
+makedepends=('intltool' 'pkg-config')
+conflicts=('compizconfig-backend-kconfig-git')
+groups=('compiz-fusion-kde-new' 'compiz-fusion-new')
+options=('!libtool')
+source=(http://releases.compiz-fusion.org/${pkgver}/compizconfig-backend-kconfig4-${pkgver}.tar.bz2)
+md5sums=('89f3cdbdbb8b1bc88f55ccaedbc8404d')
+
+build() {
+  cd ${srcdir}/compizconfig-backend-kconfig4-${pkgver}
+  mkdir build
+  cd build
+
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+  make DESTDIR="${pkgdir}" install
+}
+

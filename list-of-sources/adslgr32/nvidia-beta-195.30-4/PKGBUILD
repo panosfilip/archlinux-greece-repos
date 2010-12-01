@@ -1,0 +1,35 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=nvidia-beta 
+pkgver=195.30
+_kernver='2.6.32-ARCH'
+pkgrel=4
+pkgdesc="NVIDIA drivers for kernel26."
+arch=('i686' 'x86_64')
+[ "$CARCH" = "i686"   ] && ARCH=x86
+[ "$CARCH" = "x86_64" ] && ARCH=x86_64
+url="http://www.nvidia.com/"
+depends=('kernel26>=2.6.32.3' 'kernel26<2.6.33' "nvidia-utils-beta=${pkgver}")
+makedepends=('kernel26-headers>=2.6.32.3' 'kernel26-headers<2.6.33')
+conflicts=('nvidia-96xx' 'nvidia-173xx' 'nvidia')
+provides=("nvidia=${pkgver}")
+license=('custom')
+install=nvidia.install
+source=("ftp://download.nvidia.com/XFree86/Linux-${ARCH}/${pkgver}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run")
+md5sums=('a95834e46435920472c53b53509cf331')
+[ "$CARCH" = "x86_64" ] && md5sums=('30d27016b42b943bf8aaaf5a1e18b050')
+build() {
+	cd $srcdir
+	sh NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run --extract-only
+	cd NVIDIA-Linux-$ARCH-${pkgver}-pkg0
+
+	cd usr/src/nv/
+	ln -s Makefile.kbuild Makefile
+	make SYSSRC=/lib/modules/${_kernver}/build module
+
+	mkdir -p $pkgdir/lib/modules/${_kernver}/kernel/drivers/video/
+	install -m644 nvidia.ko $pkgdir/lib/modules/${_kernver}/kernel/drivers/video/
+
+	sed -i -e "s/KERNEL_VERSION='.*'/KERNEL_VERSION='${_kernver}'/" $startdir/nvidia.install
+}
+

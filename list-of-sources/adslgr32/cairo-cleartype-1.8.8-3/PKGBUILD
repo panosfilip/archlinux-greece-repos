@@ -1,0 +1,33 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=cairo-cleartype
+pkgver=1.8.8
+pkgrel=3
+realname=cairo
+pkgdesc="Cairo vector graphics library with cleartype patch"
+arch=(i686 x86_64)
+license=('LGPL' 'MPL')
+url="http://www.cairographics.org/"
+depends=('libpng>=1.2.37' 'libxrender' 'fontconfig>=2.6.0' 'pixman>=0.14.0' 'xcb-util>=0.3.4')
+makedepends=('pkg-config')
+replaces=('cairo' 'cairo-lcd' 'cairo-ubuntu')
+conflicts=('cairo' 'cairo-lcd' 'cairo-ubuntu')
+provides=("cairo=${pkgver}")
+groups=('font-rendering-cleartype')
+options=('!libtool')
+source=(http://www.cairographics.org/releases/${realname}-${pkgver}.tar.gz
+        cairo-1.2.4-lcd-cleartype-like.patch)
+md5sums=('d3e1a1035ae563812d4dd44a74fb0dd0'
+         'de7cccfcca8e686bca039a985436548e')
+
+build() {
+  cd "${srcdir}/${realname}-${pkgver}"
+
+  patch -Np1 -i ${startdir}/cairo-1.2.4-lcd-cleartype-like.patch
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --enable-xcb --disable-static
+  make
+  make DESTDIR="${pkgdir}" install
+}
+

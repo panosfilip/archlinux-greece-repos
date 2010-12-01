@@ -1,0 +1,46 @@
+# Based on Gentoo ebuild and Debian Multimedia repo deb.
+# Many thanks people.
+
+pkgname=aacskeys-sun
+realname=aacskeys
+pkgver=0.4.0c
+pkgrel=3
+pkgdesc="Library needed for Blu-Ray playback"
+arch=('i686' 'x86_64')
+sourcetarballdir=http://archlinuxgr.tiven.org/sources
+url="http://forum.doom9.org/showpost.php?p=1186415&postcount=352"
+license=('as-is')
+depends=('openssl>=1.0.0.a' 'jre')
+makedepends=('pkg-config' 'autoconf' 'premake' 'jdk')
+conflicts=('aacskeys' 'aacskeys-open')
+provides=("aacskeys=${pkgver}")
+source=(${sourcetarballdir}/${realname}-${pkgver}.tar.gz
+	${pkgname}-makefiles.patch)
+
+build() {
+  cd ${srcdir}/${realname}-${pkgver}
+
+  patch -Np2 -i ${srcdir}/${pkgname}-makefiles.patch
+
+  make all
+}
+
+package() {
+  cd ${srcdir}/${realname}-${pkgver}
+
+  install -D -m755 ${srcdir}/${realname}-${pkgver}/bin/linux/aacskeys ${pkgdir}/usr/bin/aacskeys
+  install -D -m644 ${srcdir}/${realname}-${pkgver}/lib/linux/libaacskeys.so ${pkgdir}/usr/lib/libaacskeys.so
+
+  install -D -m644 ${srcdir}/${realname}-${pkgver}/HostKeyCertificate.txt ${pkgdir}/usr/share/doc/HostKeyCertificate.txt
+  install -D -m644 ${srcdir}/${realname}-${pkgver}/ProcessingDeviceKeysSimple.txt ${pkgdir}/usr/share/doc/ProcessingDeviceKeysSimple.txt
+  install -D -m644 ${srcdir}/${realname}-${pkgver}/README.txt ${pkgdir}/usr/share/doc/README.txt
+
+  mkdir -p ${pkgdir}/usr/share/dumphd
+
+  cd ${pkgdir}/usr/share/dumphd
+
+  ln -s "../../lib/libaacskeys.so" "libaacskeys.so"
+}
+
+md5sums=('be52824ffdb6f4f2366dec9429a1b44c'
+         '259ff41f2f81747b501055aab7ee54ca')

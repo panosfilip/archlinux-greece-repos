@@ -1,0 +1,125 @@
+# $Id:$
+# Contributor: Balwinder S Dheeman <bdheeman@gmail.com>
+# Credits: alexwizard. thotypous, jdhore, xduugu, randypenguin
+# Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+pkgname=chromium-browser-bin
+_realname=chromium-browser
+pkgver=35700
+pkgrel=1
+pkgdesc="The open-source project behind Google Chrome"
+arch=('i686' 'x86_64')
+url=http://code.google.com/chromium/
+license=('custom:BSD')
+depends=('alsa-lib' 'desktop-file-utils' 'ffmpeg' 'gconf' 'libjpeg6' 'nss')
+optdepends=('chromium-codecs-ffmpeg-nonfree-bin: for viewing html5/h.264 videos'
+    'xdg-utils: for making/setting it as default browser')
+conflicts=('bin32-cxchromium' "${_realname}" "${_realname}-dev" "${_realname}-inspector"
+    "${_realname}-l10n" "${_realname}-latest" "${_realname}-svn" 'chromium-continuous'
+    'chromium-fresh' 'chromium-snapshot' 'chromium-snapshot-64' 'chromium-snapshot-64-last'
+    'chromium-snapshot-latest' 'cxchromium' 'google-chrome-dev' 'google_chrome_win32-bin' 'iron' 'chromium')
+provides=("${_realname}")
+options=('emptydirs')
+backup=('etc/${_realname}/default')
+install=${_realname}.install
+
+case "$CARCH" in
+    x86_64|amd64) _bldarch='chromium-rel-linux-64';;
+    i686|i386|*) _bldarch='chromium-rel-linux';;
+esac
+
+_bldname=chrome-linux.zip
+_bldroot=http://build.chromium.org/buildbot/snapshots/${_bldarch}
+
+source=('LICENSE.txt' 'chrome-wrapper.patch' "${_realname}.1.gz" "${_realname}.default"
+	"${_realname}.desktop" "${_realname}.sh")
+noextract=(${_realname}.1.gz)
+
+# trick re-determining the build revision and, or entertain the hidden
+# makepkg option --forcever, huh
+if [ -z "$FORCE_VER" ]; then
+    msg "Determining latest build revision..."
+    newpkgver="$(wget -qO - ${_bldroot}/LATEST)"
+    if [ -n "$newpkgver" -a "$newpkgver" != "$pkgver" ]; then
+	msg2 "Version found: %s" "$newpkgver"
+	FORCE_VER="$newpkgver"
+    else
+	FORCE_VER="$pkgver"
+    fi
+fi
+if [ "$FORCE_VER" = "LATEST" -a "$SOURCEONLY" -eq 0 ]; then
+    error "Plz omit '--forcever LATEST'; I'll auto-detect the LATEST ;)"
+    exit 1
+elif [ "$FORCE_VER" != "$pkgver" ]; then
+    rm -f "$SRCDEST/${_bldname}"
+    devel_update
+fi
+
+try_symlink() {
+    if [ -L /usr/lib/$1 ]; then
+	ln -s $(readlink /usr/lib/$1) $pkgdir/usr/lib/$2 || return $?
+    elif [ -r /usr/lib/$1 ]; then
+	ln -s $1 $pkgdir/usr/lib/$2 || return $?
+    else
+	printf "ln: file or symlink not found -- /usr/lib/%s\n" "$1" && return 1
+    fi
+}
+
+build() {
+    if [ ! -r "$srcdir/${_bldname}" ]; then
+	msg2 "Downloading the latest '$CARCH/$pkgver/${_bldname}'..."
+	wget --no-cache -c "${_bldroot}/$pkgver/${_bldname}" \
+	    -O "$SRCDEST/${_bldname}" || return $?
+	ln -fs "$SRCDEST/${_bldname}" "$srcdir/${_bldname}" || return $?
+    fi
+
+    msg2 "Extracting Binaries..."
+    cd $srcdir
+    bsdtar -xf $srcdir/${_bldname} || return $?
+    mkdir -p $pkgdir/opt/${_realname}
+    cp -r ./chrome-linux/* $pkgdir/opt/${_realname}
+
+    msg2 "Creating missing symlinks..."
+    mkdir -p $pkgdir/usr/lib
+    try_symlink libnss3.so libnss3.so.1d || return $?
+    try_symlink libnssutil3.so libnssutil3.so.1d || return $?
+    try_symlink libsmime3.so libsmime3.so.1d || return $?
+    try_symlink libssl3.so libssl3.so.1d || return $?
+    try_symlink libplds4.so libplds4.so.0d || return $?
+    try_symlink libplc4.so libplc4.so.0d || return $?
+    try_symlink libnspr4.so libnspr4.so.0d || return $?
+
+    msg2 "Patching script 'chrome-wrapper'..."
+    cd $pkgdir/opt/${_realname}
+    patch -sp1 < $srcdir/chrome-wrapper.patch
+
+    msg2 "Making it nice..."
+    # strip the binaries
+    strip $pkgdir/opt/${_realname}/chrome
+    strip $pkgdir/opt/${_realname}/chrome_sandbox
+    # adjust the permissions on directories and, or files, eh
+    chown -R 0:0 $pkgdir/opt/${_realname}
+    find $pkgdir/opt/${_realname} -type d -exec chmod 0755 {} ';'
+    find $pkgdir/opt/${_realname} -type f -exec chmod 0644 {} ';'
+    chmod 755 $pkgdir/opt/${_realname}/chrome
+    chmod 755 $pkgdir/opt/${_realname}/chrome[_-]*
+    chmod 755 $pkgdir/opt/${_realname}/xdg-settings
+    # install default, wrapper-script, desktop, license and manpages
+    install -Dm644 $srcdir/${_realname}.default $pkgdir/etc/${_realname}/default
+    install -Dm755 $srcdir/${_realname}.sh $pkgdir/usr/bin/${_realname}
+    install -Dm644 $srcdir/${_realname}.desktop $pkgdir/usr/share/applications/${_realname}.desktop
+    install -Dm644 $srcdir/LICENSE.txt $pkgdir/usr/share/licenses/$pkgname/LICENSE.txt
+    install -Dm644 $srcdir/${_realname}.1.gz $pkgdir/usr/share/man/man1/${_realname}.1.gz
+    mv $pkgdir/opt/${_realname}/chrome.1 $pkgdir/usr/share/man/man1/ || return $?
+    # symlink the icon file
+    mkdir -p $pkgdir/usr/share/pixmaps
+    ln -s /opt/${_realname}/product_logo_48.png $pkgdir/usr/share/pixmaps/${_realname}.png
+}
+
+# vim:set ts=4 sw=4 et:
+md5sums=('b689219f39e74e0c0b19f10a1db1839d'
+         'fda051f46b16f9a2689f9afffe27a636'
+         'eb53a4a48a1f0a642dc8ebe918ae9cf2'
+         'dfc9db0cb84aa38def9f685e26bf60b6'
+         'e98e00cd664784b98f3dc9a0e109f42f'
+         'c7b7307da94482dbba611e63548a3b2b')

@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-bcop
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compiz option code generator"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" 'libxslt')
+makedepends=('intltool' 'pkg-config')
+groups=('compiz-fusion-new' 'compiz-fusion-gtk-new' 'compiz-fusion-kde-new')
+conflicts=('compiz-bcop-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('17c4d1de361acf835f6649ab392f4c62')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

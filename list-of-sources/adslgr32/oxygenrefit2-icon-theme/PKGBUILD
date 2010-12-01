@@ -1,0 +1,20 @@
+# Mantainer: William Díaz <wdiaz@archlinux.us>
+# Contributor: Georgij Kondratjev <smpuj@bk.ru>
+
+pkgname=oxygenrefit2-icon-theme
+pkgver=2.3.0
+pkgrel=2
+pkgdesc="Oxygen-Refit 2 icon theme for GNOME"
+arch=('i686' 'x86_64')
+makedepends=('findutils')
+url="http://www.gnome-look.org/content/show.php/Oxygen+Refit+2?content=79756"
+license=('LGPL3')
+source=(http://archmirror.de/aur/OxygenRefit2-$pkgver.tar.bz2)
+md5sums=('6e8007a6b40603c2571a5e7b31ff2896')
+
+build() {
+  cd ${srcdir}
+  install -d ${pkgdir}/usr/share/icons/
+  cp -rf "OxygenRefit2" ${pkgdir}/usr/share/icons/
+  find -type f -print0 | xargs -0 chmod 644
+}

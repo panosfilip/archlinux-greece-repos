@@ -1,0 +1,22 @@
+post_install() {
+
+cat << EOM 
+
+==> amsn-svn message:
+==>
+==> If you want to send Voice Clips
+==> install the snack package (it's in the AUR)
+==>
+==> If you want to have farsight support
+==> install the farsight package (it's in the AUR)
+
+EOM
+}
+
+post_upgrade() {
+    post_install $*
+}
+
+op=$1
+shift
+$op $*

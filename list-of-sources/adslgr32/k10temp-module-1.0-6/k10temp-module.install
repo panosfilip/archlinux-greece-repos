@@ -1,0 +1,21 @@
+# Copied/modified from vhba-module.install
+
+# arg 1: the new package version
+# arg 2: the old package version
+
+post_install () {
+  echo ">> This module needs to be recompiled for every kernel version upgrade."
+  depmod -a
+}
+
+pre_remove () {
+  rmmod k10temp 2> /dev/null
+}
+
+post_remove () {
+  depmod -a
+}
+
+op=$1
+shift
+$op $*

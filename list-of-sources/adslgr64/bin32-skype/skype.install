@@ -1,0 +1,20 @@
+post_install() {
+	cat <<-EndOfMessage
+	==> Use this script to start Skype with GSPCA webcam support:
+	
+		#!/bin/bash
+
+		SKYPE_BIN_PATH="/usr/bin"
+		LIBV4L="/opt/lib32/usr/lib/libv4l/v4l1compat.so"
+
+		LD_PRELOAD=${LIBV4L} skype
+
+		exit 0
+
+	EndOfMessage
+	/bin/true
+}
+
+post_upgrade() {
+	post_install
+}

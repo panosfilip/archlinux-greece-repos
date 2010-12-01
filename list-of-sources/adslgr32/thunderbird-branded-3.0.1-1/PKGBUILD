@@ -1,0 +1,61 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=thunderbird-branded
+pkgver=3.0.1
+pkgrel=1
+pkgdesc="Standalone Mail/News reader"
+arch=('i686' 'x86_64')
+license=('MPL' 'GPL')
+url="http://www.mozilla.org/projects/thunderbird"
+replaces=('mozilla-thunderbird')
+provides=('mozilla-thunderbird' 'thunderbird' 'thunderbird3' 'thunderbird-rc')
+conflicts=("mozilla-thunderbird=${pkgver}" "thunderbird=${pkgver}")
+depends=('gtk2>=2.18.5' 'gcc-libs>=4.4' 'libidl2>=0.8.13' 'mozilla-common' 'nss>=3.12.3' 'libxt' 'shared-mime-info'
+	 'alsa-lib>=1.0.21.a' 'dbus-glib>=0.82')
+makedepends=('zip' 'pkg-config' 'imagemagick>=6.5.3.10-1' 'libgnomeui')
+options=('!makeflags')
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/${pkgver}/source/thunderbird-${pkgver}.source.tar.bz2
+        mozconfig
+        thunderbird.desktop
+        thunderbird-3.0-lang.patch
+        thunderbird-appversion.patch
+	thunderbird-shared-error.patch)
+md5sums=('f004aa5ddf2a30b5df96e06df416b0c9'
+         'f32a703053e076aac8a4193d989bae23'
+         '7a119d30341dca4eadecedd523404fdb'
+         '25b6fe16ac24cd5c852213e5c1adb272'
+         '2af84c5fa1095373e0b2b450fec0d655'
+         '3dca714ee8054634e6dfdb059464dc42')
+
+build() {
+  cd "${srcdir}/comm-1.9.1"
+  patch -Np1 -i "${srcdir}/thunderbird-3.0-lang.patch"
+  patch -Np1 -i "${srcdir}/thunderbird-appversion.patch"
+  patch -Np1 -i "${srcdir}/thunderbird-shared-error.patch"
+  cp "${srcdir}/mozconfig" .mozconfig
+
+  echo "ac_cv_visibility_pragma=no" >> .mozconfig
+
+  export MOZ_PROJECT=mail
+  unset CXXFLAGS
+  unset CFLAGS
+
+  export LDFLAGS="-Wl,-rpath,/usr/lib/thunderbird-3.0"
+
+  make -f client.mk build
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}/usr/bin/defaults"
+
+  install -m755 -d "${pkgdir}/usr/share/applications"
+  install -m755 -d "${pkgdir}/usr/share/pixmaps"
+
+  install -m644 "${srcdir}/comm-1.9.1/other-licenses/branding/thunderbird/mailicon48.png" \
+  	"${pkgdir}/usr/share/pixmaps/thunderbird.png"
+
+  install -m644 "${srcdir}/thunderbird.desktop" \
+      "${pkgdir}/usr/share/applications/"
+
+  rm -f ${pkgdir}/usr/lib/pkgconfig/thunderbird-ns{s,pr}.pc
+}
+

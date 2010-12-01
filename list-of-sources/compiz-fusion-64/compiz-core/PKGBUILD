@@ -1,0 +1,42 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-core
+pkgver=0.8.4
+pkgrel=2
+pkgdesc="Composite manager for Aiglx and Xgl"
+url="http://www.go-compiz.org/"
+license=('GPL' 'LGPL' 'MIT')
+arch=('i686' 'x86_64')
+groups=('compiz-kde-new' 'compiz-gtk-new' 'compiz-fusion-new')
+depends=('startup-notification' 'librsvg' \
+         'libgl' 'dbus' 'mesa' 'libxslt' 'fuse')
+makedepends=('intltool')
+options=(!libtool !emptydirs)
+conflicts=('compiz' 'compiz-core-git' 'compiz-git')
+replaces=('compiz')
+source=(http://releases.compiz.org/core/compiz-${pkgver}.tar.bz2
+	libpng14.patch)
+md5sums=('03fa78ce0c464f3a413b2a3b74f09559'
+         '5f8cb4c084cca21d3e4ab5fcc4cbaacb')
+                  
+build()
+{
+  cd ${srcdir}/compiz-${pkgver}
+
+  patch -Np1 -i ${srcdir}/libpng14.patch
+
+  ./configure   --prefix=/usr \
+	    --disable-gnome \
+	    --disable-gtk \
+	    --disable-metacity \
+	    --disable-gconf \
+            --with-gconf-schema-file-dir=/etc/gconf/schemas \
+	    --enable-dbus \
+	    --enable-librsvg \
+	    --disable-kde \
+	    --disable-kde4
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

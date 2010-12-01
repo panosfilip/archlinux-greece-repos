@@ -1,0 +1,59 @@
+# Contributor: Pierluigi Picciau <pierluigi.picciau@gmail.com>
+# Past Contributor: Alessio 'mOLOk' Bolognino <themolok@gmail.com>
+
+pkgname=amsn-svn
+pkgver=10483
+pkgrel=1
+pkgdesc="MSN client written in Tcl/Tk"
+arch=('i686' 'x86_64')
+url="http://amsn.sourceforge.net"
+license="GPL"
+depends=('libx11' 'imlib' 'gcc' 'libsm' 'libjpeg' 'libpng' 'libtiff' 'perl' \
+         'python' 'tk' 'tls' 'zenity')
+makedepends=('subversion')
+provides=('amsn')
+conflicts=('amsn')
+replaces=('amsn-cvs')
+install=amsn-svn.install
+source=()
+md5sums=()
+
+_svnmod="amsn"
+_svntrunk="https://amsn.svn.sourceforge.net/svnroot/amsn/trunk/amsn"
+
+build() {
+  cd $srcdir
+  mkdir -p ~/.subversion; touch ~/.subversion/servers
+  msg "Connecting to $_svnmod.sourceforge.net SVN server...."
+  svn co $_svntrunk $_svnmod -r $pkgver 
+
+  [ -d ./$_svnmod-build ] && rm -fr ./$_svnmod-build
+  cp -r ./$_svnmod ./$_svnmod-build
+  cd ./$_svnmod-build
+  
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  ./configure --prefix=/usr
+  make all
+
+  # install files
+  mkdir -p $pkgdir/{usr/bin,usr/share}
+  cp -Rf $srcdir/$_svnmod-build $pkgdir/usr/share/amsn
+  chmod 755 $pkgdir/usr/share/amsn
+  
+  # install some freedesktop.org compatibility
+  install -D -m644 $srcdir/$_svnmod/amsn.desktop \
+    $pkgdir/usr/share/applications/amsn.desktop
+  install -D -m644 $srcdir/$_svnmod/desktop-icons/48x48/apps/amsn.png \
+    $pkgdir/usr/share/pixmaps/amsn.png
+
+  # fix symlinks
+  ln -sf /usr/share/amsn/amsn $pkgdir/usr/bin/amsn
+  ln -sf /usr/share/amsn/amsn-remote $pkgdir/usr/bin/amsn-remote
+  ln -sf /usr/share/amsn/amsn-remote-CLI $pkgdir/usr/bin/amsn-remote-CLI
+  
+  # remove nasty files
+  find $pkgdir/ -name ".svn" -type d -exec rm -fr {} +
+}
+# vim:syntax=sh

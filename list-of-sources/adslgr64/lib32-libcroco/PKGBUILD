@@ -1,0 +1,24 @@
+# Contributor: DonVla <donvla@users.sourceforge.net>
+# Maintainer: ranger @ adslgr.com
+
+pkgname=lib32-libcroco
+_pkgname32=libcroco
+pkgver=0.6.2
+pkgrel=1
+_pkgrel32=1
+pkgdesc="GNOME CSS2 parsing and manipulation toolkit"
+arch=('x86_64')
+url="http://www.gnome.org/"
+_downloadurl=ftp://ftp.uni-kl.de/pub/linux/archlinux/
+_repo=extra
+depends=('lib32-glib2' 'lib32-libxml2')
+license=('custom')
+groups=lib32
+source=(${_downloadurl}/${_repo}/os/i686/${_pkgname32}-${pkgver}-${_pkgrel32}-i686.pkg.tar.gz)
+md5sums=('801152fb11912611e8154e85492688e2')
+sha256sums=('0f9d0a4e582a0fdc8ce16bfe456eaf8f55634a3bc5598a95abfa3c50877a8d93')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/lib
+  cp -rPf ${srcdir}/usr/lib/*.so* ${pkgdir}/opt/lib32/usr/lib
+}

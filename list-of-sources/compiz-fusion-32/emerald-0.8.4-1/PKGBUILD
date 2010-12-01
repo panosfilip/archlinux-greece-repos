@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=emerald
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Emerald window decorator"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=('compiz-core>=${pkgver}' 'libwnck' 'gtk2' 'libxres')
+makedepends=('intltool' 'pkg-config' 'gettext')
+groups=('compiz-fusion-new' 'compiz-fusion-kde-new' 'compiz-fusion-gtk-new')
+conflicts=('emerald-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('e92fbe8252ea393206d98ed6ae9af4ec')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

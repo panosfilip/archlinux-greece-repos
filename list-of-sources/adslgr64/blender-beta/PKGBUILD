@@ -1,0 +1,52 @@
+# Maintainer: Rene Peinthor <peinthor@gmail.com>
+# Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+pkgname=blender-beta
+pkgver=2.55
+pkgrel=3
+pkgdesc="Blender beta version build from source"
+arch=('i686' 'x86_64')
+url="http://blender.org/"
+depends=('libpng' 'libgl' 'mesa' 'openexr' 'gettext' 'python' 'desktop-file-utils' 'libsamplerate'
+         'hicolor-icon-theme' 'ffmpeg' 'fftw' 'lcms')
+makedepends=('python' 'yasm' 'cmake')
+provides=("blender=${pkgver}")
+conflicts=('blender')
+license=('GPL')
+install=blender.install
+source=(http://download.blender.org/source/blender-$pkgver-beta.tar.gz blender.desktop)
+md5sums=('ddd5a92d2b55dad3b08fe2125f3d4fc1'
+         '634b532b58d5ef51bcbb7859b318e81d')
+
+build() {
+  msg "Starting make..."
+  cd "$srcdir"/blender-$pkgver-beta
+
+  ##########
+  [ -e "$srcdir"/blender-$pkgver-beta-build ] || mkdir -p "$srcdir"/blender-$pkgver-beta-build
+  cd "$srcdir"/blender-$pkgver-beta-build
+  cmake -DCMAKE_INSTALL_PREFIX=/usr "$srcdir"/blender-$pkgver-beta
+  make
+  ##########
+  # now compile some plugins
+  cp -rf "$srcdir"/blender-$pkgver-beta/release/plugins/* \
+    "$srcdir"/blender-$pkgver-beta/source/blender/blenpluginapi/
+  cd "$srcdir"/blender-$pkgver-beta/source/blender/blenpluginapi
+  chmod 755 bmake
+  sed -i 's/\r$//' bmake
+  make
+}
+
+package() {
+  cd "$srcdir"/blender-$pkgver-beta-build
+  make DESTDIR="$pkgdir" install
+  install -D -m644 "$srcdir"/blender.desktop \
+    "$pkgdir"/usr/share/applications/blender.desktop
+
+  # install plugins
+  install -d -m755 "$pkgdir"/usr/share/blender/*/plugins/{sequence,texture}
+  cp "$srcdir"/blender-$pkgver-beta/source/blender/blenpluginapi/sequence/*.so \
+    "$pkgdir"/usr/share/blender/*/plugins/sequence/
+  cp "$srcdir"/blender-$pkgver-beta/source/blender/blenpluginapi/texture/*.so \
+    "$pkgdir"/usr/share/blender/*/plugins/texture/
+}

@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compizconfig-python
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compizconfig bindings for python"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" "libcompizconfig>=${pkgver}" 'glib2' 'python' 'pyrex')
+makedepends=('intltool' 'pkg-config')
+groups=('compiz-fusion-new' 'compiz-fusion-gtk-new' 'compiz-fusion-kde-new')
+conflicts=('compizconfig-python-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('702f83f63ce5dc3c6c1d27e07fb62fc3')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

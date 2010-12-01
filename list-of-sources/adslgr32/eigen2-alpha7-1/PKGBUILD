@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=eigen2
+pkgver=alpha7
+pkgrel=1
+pkgdesc="A C++ template library for linear algebra."
+arch=('i686' 'x86_64')
+url="http://eigen.tuxfamily.org/index.php?title=Main_Page"
+license=('GPL')
+makedepends=('cmake')
+source=(http://download.tuxfamily.org/eigen/eigen-2.0-${pkgver}.tar.bz2)
+noextract=()
+md5sums=('97f0d655dd020df6fa9d40dcdf967ef2') 
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  mkdir build
+  cd build
+
+  cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+  make
+  make DESTDIR="${pkgdir}/" install
+}
+

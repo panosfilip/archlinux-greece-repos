@@ -1,0 +1,36 @@
+pkgname=q7z
+realname=Q7Z
+oldname=k7z
+pkgver=0.8.0
+pkgrel=1
+pkgdesc="A P7Zip GUI for Linux, which attempts to simplify data compression and backup."
+arch=("any")
+url=http://k7z.sourceforge.net/7Z/Q7Z/
+license=('GPL3')
+depends=('qt>=4.4.1' 'pyqt>=4.4.3' 'p7zip>=4.57' 'tar>=1.15')
+makedepends=('make>=3.80')
+optdepends=("p7zip-gui: The GUI component of P7Zip"
+			"xz-utils: Supports XZ archives"
+			"bzip2: Supports BZip2 archives"
+			"gzip: Supports GZip archives")
+replaces=(${oldname})
+install=(${realname}.install)
+source=(http://prdownloads.sourceforge.net/${oldname}/${realname}-${pkgver}.tar.bz2)
+md5sums=('bdc7be93d15663d2289c7139629e26e1')
+
+build() {
+	cd ${srcdir}/${realname}/Build
+
+	# Variables
+	export Package=1
+	export Arch=1
+
+	# Build
+	#make uninstall
+	#make clean
+	make
+	make DESTDIR=${pkgdir} install
+
+	# Messages
+	msg "Seek further information or send feedback via the 'Help' menu."
+}

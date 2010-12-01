@@ -1,0 +1,24 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-manager
+pkgver=0.6.0
+pkgrel=3
+pkgdesc="Compiz Fusion Starter Program"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}")
+conflicts=('compiz-manager-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2 
+        path.patch)
+md5sums=('3efdcb58bc8f6ea40b5141e39e5b5ff3'
+         '3dd3d118183c4809c8d4599281dc0c44')
+                           
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  patch -Np0 -i ${srcdir}/path.patch
+         
+  mkdir -p ${pkgdir}/usr/bin
+  install -D -m755 compiz-manager ${pkgdir}/usr/bin
+}
+

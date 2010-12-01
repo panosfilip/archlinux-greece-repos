@@ -1,0 +1,154 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=firefox-pgo-core
+pkgver=3.6
+_mozver=1.9.2
+pkgrel=1
+pkgdesc="Mozilla Firefox customizable web browser (XULRunner independent, PGO optimized, 64-bit TraceMonkey)"
+url="http://www.mozilla.org/projects/firefox"
+arch=('i686' 'x86_64')
+license=('MPL' 'GPL' 'LGPL')
+_soundsystem='alsa-lib'
+depends=('gtk2>=2.18.0' 'gcc-libs>=4.4' 'libidl2>=0.8.13' 'mozilla-common'
+         'nss>=3.12.4' 'libxt' 'hunspell>=1.2.8' 'startup-notification>=0.10'
+         'libnotify>=0.4' 'mime-types' 'dbus-glib>=0.82' 'desktop-file-utils'
+         'cairo' ${_soundsystem})
+makedepends=('autoconf-compat' 'gcc>=4.4' 'zip' 'pkg-config' 'diffutils'
+             'libgnomeui>=2.24.1' 'python' 'wireless_tools')
+conflicts=('firefox' 'firefox3' 'firefox-branded'
+	   'firefox-pgo' 'firefox-beta' 'firefox-pgo-beta'
+	   'firefox-pgo-phenom' 'firefox-pgo-beta-phenom' 'firefox-pgo-beta-core')
+provides=("firefox=${pkgver}" "firefox-pgo=${pkgver}")
+source=("ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${pkgver}/source/firefox-${pkgver}.source.tar.bz2"
+        'mozconfig'
+        'firefox.desktop'
+        'firefox-safe.desktop'
+        'mozilla-ps-pdf-simplify-operators.patch'
+        '100-system-hunspell-corrections.patch'
+        'fix-mozilla-launcher.patch'
+        'mozilla-firefox-1.0-lang.patch'
+        'ldflags-namespec.patch'
+        'enable-x86_64-tracemonkey.patch'
+        'jemalloc-enable-pgo.patch'
+        'potential-pgo-fix.patch')
+sha256sums=('8d4f12fff7bc361d83e6b486f9ec4264c60114ed86c805e1221b3d30efec0a4b'
+            '0087865ce9f352f86c235fea756c333d3c6610fe039515062eac1d6f4687a85b'
+            '21722965bb0bab05e3fbd2f584dbcaeb9f0726ed755f59bbf6fb26a7f964e6ec'
+            '00641e2d7ba45a607522a621aa86c21e13b2951ebca920b1e0b538b0e1188445'
+            '29cbe8f077723cfa6c2f5ba46aa64fbe969a7aec52aa58f068d830784282d3c3'
+            '00c854d817b878270f9362c0ab432e210f8d4b5a01a1b8b68c17012c16c7a77e'
+            'd4948cc5878b2100b4d19b0fbc09119c34377593c5847678d5788db2b4e0fe43'
+            '0ca095ff2af57297f615877a7e79ddc84d1a3f62509a8af6ca50aad7a8671f6a'
+            '0e9631fdad5efa3fd7a95b59171f5d15420d10aa61748b920cc994ee9227915c'
+            '20f558efbf4ed1960b390c353c7eeb94108fcdb8aaf33f1fea6caf44468aeb7c'
+            'e6b8345215eb0c595cadfd6b1abb3a12a1cad8b8b1f3528e6affc58900695215'
+            'bf53a9712aada73dbecb45516bf932b52e7b8debf25cf19294adbfcc54d80028')
+
+build() {
+	msg "* Note: If the build fails, try again, try without jemalloc PGO, try without *"
+	msg "* PGO at all, and if you're using x86_64, try without TraceMonkey. Also, try *"
+	msg "* with 'potential-pgo-fix.patch'. PGO can be very temperamental -- it can    *"
+	msg "* sometimes take two or three builds before you'll get a good one.           *"
+#	sleep 15
+	cd "$srcdir"/mozilla-$_mozver
+
+	cp "$srcdir"/mozconfig .mozconfig
+	# Don't strip if the user doesn't want us to... ;p
+	if [ "$(check_option strip)" = "n" ]; then
+		sed -i 's/--enable-strip/--disable-strip/' \
+			.mozconfig
+		sed -i 's/--enable-install-strip/--disable-install-strip/' \
+			.mozconfig
+	fi
+
+	if [ "$_soundsystem" = "oss" ]; then
+		msg "Using OSS instead of ALSA."
+		sed -i 's/sydney_audio_alsa/sydney_audio_oss/' \
+		       media/libsydneyaudio/src/Makefile.in
+		# Get rid of ALSA config system stuff (requires autoconf rerun)
+		sed -i '/alsa\//d' config/system-headers
+		sed -i '/alsa\//d' js/src/config/system-headers
+		sed -i '/LIB(asound/d' configure.in
+	fi
+
+
+	msg "Patching source."
+	msg "Patches from main Arch xulrunner/firefox packages..."
+	# Upstream patch, still not in trunk
+	patch -Np1 -i "$srcdir"/mozilla-ps-pdf-simplify-operators.patch
+	# Fix build with system Hunspell - Gentoo
+	patch -Np0 -i "$srcdir"/100-system-hunspell-corrections.patch
+	# Fix stub launcher - Arch
+	patch -Np0 -i "$srcdir"/fix-mozilla-launcher.patch
+	# Use LANG environment variable to choose locale
+	patch -Np1 -i "$srcdir"/mozilla-firefox-1.0-lang.patch
+
+
+	msg "Patches from this package..."
+	# PGO compilation LDFLAGS fix
+	patch -Np1 -i "$srcdir"/ldflags-namespec.patch
+
+	# Enable TraceMonkey engine on x86_64; normally only firefox>=3.7
+	# has 64-bit TM.  See Mozilla bug #489146.  Requires autoconf run.
+	# Does not affect 32-bit builds. This can be problematic, but it should
+	# boost speed FAR more than PGO. So, if only PGO and only TM build,
+	# but not both, go with TM.
+	patch -Np0 -i "$srcdir"/enable-x86_64-tracemonkey.patch
+
+	# Enable experimental PGO for jemalloc (speed).
+	# See Mozilla bugs #418866 and #419470.
+	patch -Np0 -i "$srcdir"/jemalloc-enable-pgo.patch
+
+	# Sometimes necessary for PGO build to work, especially when PGO compile
+	# aborts with an error about control sum mismatch (thx to methuselah!)
+#	patch -Np1 -i "$srcdir/potential-pgo-fix.patch"
+
+
+	msg "Setting up build."
+	# Changing the user's optimization flags is justified, because this is
+	# a package specifically for an optimized software build, and because of
+	# the official branding, binaries can't be redistributed anyways.
+	# These flags just set guidelines for the build, they are overridden in
+	# most compile job pieces by Firefox's better judgement.
+	export CFLAGS="-march=native -O2 -pipe"
+	export CXXFLAGS="-march=native -O2 -pipe"
+	# The hash-style and as-needed flags are in Arch defaults anyways,
+       	# and the other optimization flags are almost definitely safe.
+	export LDFLAGS="-Wl,-rpath,/usr/lib/firefox-$pkgver -Wl,-O1,--sort-common,--hash-style=gnu,--as-needed"
+
+	autoconf-2.13
+
+
+	msg "Actual build."
+	# Compile a non-PGO build first to reduce chance of error in PGO build.
+	make -j1 -f client.mk build MOZ_MAKE_FLAGS="$MAKEFLAGS"
+	# Comment out following lines for non-PGO build.
+	msg "Profiled build now."
+	# Don't let PGO disrupt the user, use a virtual framebuffer.
+	LD_PRELOAD="" /usr/bin/Xvfb -nolisten tcp -extension GLX :99 &
+	XPID=$!
+	# Yes, this is SMP -- MOZ_MAKE_FLAGS takes care of it.
+	DISPLAY=:99 LD_PRELOAD="" make -j1 -f client.mk profiledbuild \
+		MOZ_MAKE_FLAGS="$MAKEFLAGS"
+	kill -9 $XPID
+}
+
+package() {
+	cd "$srcdir/mozilla-$_mozver"
+
+	msg "Installing to $pkgdir."
+	make -j1 DESTDIR="$pkgdir" -C ff-pgo install
+
+	install -Dm644 "$srcdir/mozilla-$_mozver/other-licenses/branding/firefox/mozicon128.png" \
+		"$pkgdir/usr/share/pixmaps/firefox.png"
+	install -Dm644 "$srcdir/firefox.desktop" \
+		"$pkgdir/usr/share/applications/firefox.desktop"
+	install -Dm644 "$srcdir/firefox-safe.desktop" \
+		"$pkgdir/usr/share/applications/firefox-safe.desktop"
+
+	# Remove devel stuff.
+	rm -rf "$pkgdir/usr/include/"
+	rm -rf "$pkgdir/usr/lib/firefox-devel-$pkgver/"
+	rm -rf "$pkgdir/usr/share/idl/"
+}
+

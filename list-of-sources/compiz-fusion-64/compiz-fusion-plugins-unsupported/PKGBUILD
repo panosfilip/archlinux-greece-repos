@@ -1,0 +1,27 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-fusion-plugins-unsupported
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compiz Fusion Unsupported plugins"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" "compiz-bcop>=${pkgver}" "compiz-fusion-plugins-main>=${pkgver}" 'libnotify')
+makedepends=('intltool' 'pkg-config' 'gettext')
+groups=('compiz-fusion-new' 'compiz-fusion-gtk-new' 'compiz-fusion-kde-new')
+conflicts=('compiz-fusion-plugins-unsupported-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/compiz-plugins-unsupported-${pkgver}.tar.bz2)
+md5sums=('73c7d70040cd4fd48ea29677b0f2f21e')
+options=(!libtool)
+
+build() {
+  cd ${srcdir}/compiz-plugins-unsupported-${pkgver}
+
+  sed -i 's/if text "x$use/if test "x$use/' configure
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

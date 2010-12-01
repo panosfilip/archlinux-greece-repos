@@ -1,0 +1,25 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=libcompizconfig
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compiz configuration system library"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" 'libxml2')
+makedepends=('intltool' 'pkg-config')
+groups=('compiz-fusion-new' 'compiz-fusion-gtk-new' 'compiz-fusion-kde-new')
+conflicts=('libcompizconfig-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+options=('!emptydirs' '!libtool')
+md5sums=('723e076722370c35c47c2ab2ae445422')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --sysconfdir=/etc
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

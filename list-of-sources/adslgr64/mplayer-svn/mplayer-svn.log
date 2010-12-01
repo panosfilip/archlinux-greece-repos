@@ -1,0 +1,79 @@
+------------------------------------------------------------------------
+r32636 | komh | 2010-11-20 13:39:05 +0200 (Sat, 20 Nov 2010) | 4 lines
+
+Set font_fontconfig to -1 if CONFIG_FONTCONFIG is not configured.
+
+Without this, -font and -subfont do not work when using -ass.
+
+------------------------------------------------------------------------
+r32635 | reimar | 2010-11-20 12:47:58 +0200 (Sat, 20 Nov 2010) | 4 lines
+
+Fix TS demuxer with -sb and when -aid stream is not found.
+Make it seek back to the stream->start_pos position instead of 0 in that case.
+Fixes bug 1790.
+
+------------------------------------------------------------------------
+r32634 | cboesch | 2010-11-18 22:20:39 +0200 (Thu, 18 Nov 2010) | 2 lines
+
+Add Proxy-Authorization header to authenticate on proxies
+
+------------------------------------------------------------------------
+r32633 | cboesch | 2010-11-18 22:18:44 +0200 (Thu, 18 Nov 2010) | 2 lines
+
+"Authentication" header is for the destination server URL, even through a proxy
+
+------------------------------------------------------------------------
+r32632 | cboesch | 2010-11-17 23:14:55 +0200 (Wed, 17 Nov 2010) | 4 lines
+
+Handle correctly paths with mixed '/' and '\' in it.
+
+Patch by Yuriy Kaminskiy (yumkam at mail ru)
+
+------------------------------------------------------------------------
+r32631 | cboesch | 2010-11-17 18:33:48 +0200 (Wed, 17 Nov 2010) | 5 lines
+
+Fix crash on path without directories.
+
+Regression introduced in r32630. Patch by Yuriy Kaminskiy yumkam at mail ru.
+
+
+------------------------------------------------------------------------
+r32630 | cboesch | 2010-11-16 23:06:52 +0200 (Tue, 16 Nov 2010) | 2 lines
+
+Export mp_basename in a function instead of duplicate macros in various places
+
+------------------------------------------------------------------------
+r32629 | reimar | 2010-11-16 21:58:54 +0200 (Tue, 16 Nov 2010) | 3 lines
+
+Do not initialize codec_id to a nonsense value (it was initialized
+to the stream id).
+
+------------------------------------------------------------------------
+r32628 | reimar | 2010-11-14 17:35:53 +0200 (Sun, 14 Nov 2010) | 2 lines
+
+Indicate that stereo3d can now handle strides properly.
+
+------------------------------------------------------------------------
+r32627 | reimar | 2010-11-14 17:34:27 +0200 (Sun, 14 Nov 2010) | 2 lines
+
+Remove unused struct element.
+
+------------------------------------------------------------------------
+r32626 | reimar | 2010-11-14 17:33:25 +0200 (Sun, 14 Nov 2010) | 3 lines
+
+Properly support src/dst stride in vf_stereo3d.
+Patch by Endre Kollár [taxy443 gmail com]
+
+------------------------------------------------------------------------
+r32625 | reimar | 2010-11-14 17:24:12 +0200 (Sun, 14 Nov 2010) | 3 lines
+
+Adjust d_height instead of bad ad-hoc scaling.
+Patch by Endre Kollár [taxy443 gmail com]
+
+------------------------------------------------------------------------
+r32624 | cboesch | 2010-11-14 11:12:34 +0200 (Sun, 14 Nov 2010) | 4 lines
+
+Remove most of the useless NULL pointer checks before free all over the code
+
+"If ptr is NULL, no operation is performed." (man 3 free)
+

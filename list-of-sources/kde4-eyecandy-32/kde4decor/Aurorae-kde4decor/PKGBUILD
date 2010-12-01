@@ -1,0 +1,21 @@
+#Contributor: ranger @ adslgr.com
+pkgname=aurorae-engine-kde4decor
+realname=aurorae
+pkgver=0.2.1
+pkgrel=1
+pkgdesc="Aurorae is a theme engine for KWin window decorations"
+groups=('adslgr-kde4decor' 'adslgr-kde4-eyecandy')
+arch=('i686' 'x86_64')
+url="http://www.kde-look.org/content/show.php?content=107158"
+depends=('kdebase-workspace>=4.3.0')
+makedepends=('cmake' 'automoc4' 'gcc')
+source=("http://www.kde-look.org/CONTENT/content-files/107158-${realname}-${pkgver}.tar.gz")
+license=('GPL')
+md5sums=('7b92f0d8d661aaafbb2c391a64907906')
+
+build() {
+        cd $srcdir/${realname}
+        cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` .
+        make
+        make DESTDIR=$pkgdir install
+}

@@ -1,0 +1,40 @@
+# Maintainer: speed145a/Jonny James <speed145a@aol.com>
+# Contributor: Ambi <ak_ambi@op.pl>
+# Contributor: Zerial <fernando@zerial.org>
+# Contributor: Jaroslaw Swierczynski <swiergot@juvepoland.com>
+# Contributor: dongiovanni
+# Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+_pkgresourcename=skype
+pkgname=bin32-skype
+pkgver=2.1.0.81
+pkgrel=3
+pkgdesc="P2P software for high-quality voice communication"
+url="http://www.skype.com/"
+license=(custom)
+arch=(x86_64)
+provides=('skype')
+source=(http://www.skype.com/go/getskype-linux-beta-dynamic/$_pkgresourcename-$pkgver.tar.bz2)
+depends=('lib32-libxi' 'lib32-libxrender' 'lib32-libxrandr' 'lib32-freetype2' 'lib32-fontconfig' 'lib32-openssl' 'lib32-pcre' 'lib32-alsa-lib' 'lib32-dbus-core' 'lib32-libxv' 'lib32-libxss' 'lib32-glib2' 'lib32-e2fsprogs' 'lib32-qt')
+optdepends=('lib32-libv4l: support for webcams using the GSPCA kernel')
+conflicts=('bin32-skype-staticqt')
+install=skype.install
+md5sums=('5411dcf89e33f53df5fbe5958bbaef54')
+options=(!strip)
+
+build() {
+  cd $srcdir/$_pkgresourcename-$pkgver
+  install -m 755 -d $pkgdir/usr/share/$_pkgresourcename/{avatars,lang,sounds}
+  install -m 644 avatars/* $pkgdir/usr/share/$_pkgresourcename/avatars
+  install -m 644 lang/* $pkgdir/usr/share/$_pkgresourcename/lang
+  install -m 644 sounds/* $pkgdir/usr/share/$_pkgresourcename/sounds
+  install -m 755 -D $_pkgresourcename $pkgdir/usr/bin/$_pkgresourcename
+  install -m 755 -D $_pkgresourcename $pkgdir/usr/bin/$_pkgresourcename
+  install -m 644 -D $_pkgresourcename.conf $pkgdir/etc/dbus-1/system.d/$_pkgresourcename.conf
+  install -m 644 -D icons/SkypeBlue_16x16.png $pkgdir/usr/share/icons/hicolor/16x16/$_pkgresourcename.png
+  install -m 644 -D icons/SkypeBlue_32x32.png $pkgdir/usr/share/icons/hicolor/32x32/$_pkgresourcename.png
+  install -m 644 -D icons/SkypeBlue_48x48.png $pkgdir/usr/share/icons/hicolor/48x48/$_pkgresourcename.png
+  install -m 644 -D icons/SkypeBlue_48x48.png $pkgdir/usr/share/pixmaps/$_pkgresourcename.png
+  install -m 644 -D $_pkgresourcename.desktop $pkgdir/usr/share/applications/$_pkgresourcename.desktop
+  install -m 644 -D LICENSE $pkgdir/usr/share/licenses/$_pkgresourcename/LICENSE
+}

@@ -1,0 +1,46 @@
+# Maintainer: Arkham <arkham at archlinux dot us>
+# Contributor: Kaos <gianlucaatlas (at) gmail (dot) com>
+# Contributor: Julius Bullinger <julius.bullinger@gmail.com>
+# Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+pkgname=opera-devel-qt4
+_build=4744
+_realver=10.20-${_build}
+pkgver=10.20_${_build}
+pkgrel=1
+pkgdesc="The Opera web browser development and testing version, shared Qt4 version"
+arch=('i686' 'x86_64')
+url="http://my.opera.com/desktopteam/blog"
+license=('custom:opera')
+depends=('qt')
+conflicts=('opera' 'opera-devel' 'opera-static')
+provides=('opera' 'opera-devel' 'opera-static')
+if [ "$CARCH" == "i686" ];then
+      source=(http://snapshot.opera.com/unix/snapshot-$_build/intel-linux/opera-$_realver.gcc4-qt4.i386.tar.bz2
+              opera.desktop
+              opera.svg)
+      md5sums=('')
+
+elif [ "$CARCH" == "x86_64" ];then
+       source=(http://snapshot.opera.com/unix/snapshot-$_build/x86_64-linux/opera-$_realver.gcc4-qt4.x86_64.tar.bz2
+          opera.desktop
+          opera.svg)
+
+   md5sums=('9a718aee1ccfc260913298ff50682341'
+            'e68398e5b8c4cb0b59fdb661ff1877e6'
+            'bf26b6d02091786d4ed45f4874874e3a')
+fi
+
+build() {
+    # Install the data and the license
+    [ "$CARCH" == "i686" ] && cd $srcdir/opera-$_realver.gcc4-qt4.i386
+    [ "$CARCH" == "x86_64" ] && cd $srcdir/opera-$_realver.gcc4-qt4.x86_64
+    ./install.sh DESTDIR=$pkgdir
+    install -Dm 644 LICENSE $pkgdir/usr/share/licenses/$pkgname/license.txt
+
+    # Install .desktop and icon
+    install -Dm 644 $srcdir/opera.desktop $pkgdir/usr/share/applications/opera.desktop
+    install -Dm 644 $srcdir/opera.svg $pkgdir/usr/share/opera/images/opera.svg
+}
+
+

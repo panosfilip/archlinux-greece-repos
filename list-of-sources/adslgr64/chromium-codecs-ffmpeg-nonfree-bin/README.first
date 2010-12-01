@@ -1,0 +1,14 @@
+PLEASE NOTE, NOTE IT DOWN TO MAKE YOUR AND MINE LIVES SMOOTH!
+
+I use and, or reccomend only offcial/standard tools for building,
+installing and, or ArchLinux packages and AUR's.
+
+The 'yaourt' seems as complicated as its name, hence better you
+avoid it; if you still don't like the idea -- you may update the
+AUR's with 'yaourt', but do build and, or install using the nice 
+*makepkg* only.
+
+Hope that helps,
+As ever,
+--
+Balwinder S Dheeman

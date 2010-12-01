@@ -1,0 +1,38 @@
+arch=('i686' 'x86_64')
+url="http://www.kde.org"
+pkgname=webkit-kpart-svn
+pkgver=1078162
+pkgrel=1
+pkgdesc="a webkit kpart for konqueror"
+license=('GPL2')
+depends=('kdelibs>=4.1.0')
+makedepends=('subversion' 'automoc4')
+conflicts=('webkit-kpart')
+provides=('webkit-kpart')
+source=()
+md5sums=()
+
+_svntrunk=svn://anonsvn.kde.org/home/kde/trunk/playground/libs/webkitkde/
+_svnmod=webkitkde
+
+build() {
+  cd $srcdir
+
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  cp -r $_svnmod $_svnmod-build
+  cd $_svnmod-build
+
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release .
+  make
+  make DESTDIR=$pkgdir/ install
+
+  rm -rf $srcdir/$_svnmod-build
+}

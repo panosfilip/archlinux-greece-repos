@@ -1,0 +1,27 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-fusion-plugins-extra
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compiz Fusion Extra plugins"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" "compiz-bcop>=${pkgver}" "compiz-fusion-plugins-main>=${pkgver}" 'libnotify')
+makedepends=('intltool' 'pkg-config' 'gettext')
+groups=('compiz-fusion-new' 'compiz-fusion-gtk-new' 'compiz-fusion-kde-new')
+conflicts=('compiz-fusion-plugins-extra-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/compiz-plugins-extra-${pkgver}.tar.bz2)
+md5sums=('b40c3058c30a58bdc46631d5a47323d8')
+options=(!libtool)
+
+build() {
+  cd ${srcdir}/compiz-plugins-extra-${pkgver}
+
+  sed -i 's/if text "x$use/if test "x$use/' configure
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=${pkgdir} install
+}
+

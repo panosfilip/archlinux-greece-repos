@@ -1,0 +1,40 @@
+
+2009-01-21 (Ruben)
+ * Improved layout flexibility of the contact properties dialog. (Trunk backport)
+
+2009-01-20 (Pano)
+ * Merged an updated Brazilian Portuguese translation by Morris Arozi Moraes.
+
+2010-01-19 (Adam)
+ * Bump copyright years.
+ * Bug fix: correctly parse MSN color information in chat messages.
+ * Bump version to 2.0.3dev.
+
+2010-01-17 (Adam)
+ * Bug fix: friendly names weren't shown in Ink error messages.
+ * Bug fix: Ink validation failed if there were trailing \r\n characters; trim them out first.
+ * Bug fix: fixed long standing crash that occurred with InvitedContacts and restarted chats.
+            Reported by Ralesk.
+
+2010-01-16 (Pano)
+ * Merged an updated Greek translation by Dimitrios Glentadakis.
+
+2010-01-15 (Ruben)
+ * Merged improved patch by Mamadou Gueye, to show email count in systray tooltip.
+
+2010-01-09 (Pano)
+ * Updated message catalogs (POT and PO files)
+
+2010-01-08 (sifcenter)
+ * Use the SOAP reply into QDocDocument to indent and print it.
+ * Added a small tooltip for the image in contact properties dialog.
+
+2010-01-08 (Valerio)
+ * Improved the sizes of the friendly name and personal message labels on the
+   Contact List.
+ * Added a workaround to a KDE bug, requiring the spell checker to be set twice
+   when switching between tabs.
+
+2010-01-06 (Pano)
+ * Merged an updated French translation by Grégory Bellier.
+

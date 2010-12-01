@@ -1,0 +1,11 @@
+------------------------------------------------------------------------------
+r3547 | WAntilles | 2010-06-06 (Sun, 06 Jun 2010)
+
+Included patch to optionally enable VDPAU DivX/XviD decoding, when VDPAU is
+the selected output, through an option in the smplayer.ini file as shown in:
+
+http://smplayer.berlios.de/forum/viewtopic.php?f=4&t=285
+
+By default, it is disabled.
+------------------------------------------------------------------------------
+

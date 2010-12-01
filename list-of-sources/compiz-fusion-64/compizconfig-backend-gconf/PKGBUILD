@@ -1,0 +1,29 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compizconfig-backend-gconf
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compizconfig backend for gconf"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org"
+license=('GPL')
+depends=("libcompizconfig>=${pkgver}" 'gconf>=2.28.0')
+makedepends=('intltool' 'pkg-config')
+conflicts=('compizconfig-backend-gconf-git')
+groups=('compiz-fusion-gtk-new' 'compiz-fusion-new')
+options=('!libtool')
+source=(http://releases.compiz-fusion.org/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('3149b45d1099c26735f3b6a91d946b1b')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure \
+    --prefix=/usr \
+    --infodir=/usr/share/info \
+    --mandir=/usr/share/man \
+    --sysconfdir=/etc
+                
+  make
+  make DESTDIR=${pkgdir} install
+}
+

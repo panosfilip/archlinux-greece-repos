@@ -1,0 +1,32 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=krusader-svn
+realname=krusader
+pkgver=1075804
+pkgrel=1
+lateststablever=2.1.0
+pkgdesc="Advanced twin panel file manager for KDE - SVN version"
+tarname=krusader-svn
+sourcetarballdir=http://adslgr64.tiven.org/sources
+arch=('i686' 'x86_64')
+url="http://www.krusader.org/"
+license=('GPL')
+depends=('kdelibs>=4.3.0' 'kdebase-runtime>=4.3.0')
+makedepends=('cmake' 'automoc4')
+conflicts=('krusader')
+provides=("krusader=${lateststablever}")
+source=(${sourcetarballdir}/${tarname}-${pkgver}.tar.bz2)
+md5sums=('21cb9b6fe8027ac9d9542342c5797911')
+
+build() {
+  cd ${srcdir}
+
+  mkdir build
+  cd build
+
+  cmake ../${realname} \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  make
+  make DESTDIR=${pkgdir} install
+}
+

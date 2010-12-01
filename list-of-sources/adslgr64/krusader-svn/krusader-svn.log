@@ -1,0 +1,20 @@
+------------------------------------------------------------------------
+r1193484 | janlepper | 2010-11-06 11:53:11 +0200 (Sat, 06 Nov 2010) | 2 lines
+
+changed history button icon: "view-history" -> "chronometer"
+
+------------------------------------------------------------------------
+r1193458 | yurchor | 2010-11-06 08:55:27 +0200 (Sat, 06 Nov 2010) | 1 line
+
+fix typo: Toobar->Toolbar
+------------------------------------------------------------------------
+r1193327 | janlepper | 2010-11-05 17:19:25 +0200 (Fri, 05 Nov 2010) | 2 lines
+
+ADDED: option: Panel > Buttons > Toobar buttons have icons
+
+------------------------------------------------------------------------
+r1193322 | janlepper | 2010-11-05 16:44:12 +0200 (Fri, 05 Nov 2010) | 3 lines
+
+listpanel: New class ActionButton wich is asociated with an action.
+           When clicked, it first focuses the panel, then triggers the action.
+

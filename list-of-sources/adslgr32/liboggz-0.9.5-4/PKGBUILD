@@ -1,0 +1,24 @@
+# Contributor: Jeff Bailes <thepizzaking@gmail.com>
+# Previous contributor: William Rea <sillywilly@gmail.com>
+pkgname=liboggz
+pkgver=0.9.5
+pkgrel=4
+pkgdesc="A simple programming interface for reading and writing Xiph.Org files and streams"
+arch=('i686' 'x86_64')
+url="http://www-old.annodex.net/software/liboggz"
+license=('custom')
+depends=('libogg')
+options=('!libtool')
+source=(http://www-old.annodex.net/software/liboggz/download/liboggz-$pkgver.tar.gz)
+md5sums=('781fab29dea3c5e9d39ecbd1d007fb98')
+
+build() {
+  cd $srcdir/liboggz-$pkgver
+  ./configure --prefix=/usr
+  make
+  make DESTDIR=$pkgdir install
+
+  mv doc/*.1 $pkgdir/usr/man/man1
+
+  install -D COPYING $pkgdir/usr/share/licenses/$pkgname/COPYING
+}

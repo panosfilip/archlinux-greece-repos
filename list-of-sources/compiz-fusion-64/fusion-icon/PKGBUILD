@@ -1,0 +1,25 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=fusion-icon
+pkgver=20091015
+pkgrel=2
+pkgdesc="Simple tray icon for compiz"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+tarname=fusion-icon
+sourcetarballdir=http://adslgr64.tiven.org/sources
+depends=("compiz-core>=0.8.4" 'pygtk' "compizconfig-python>=0.8.4"
+         'hicolor-icon-theme' 'libtool' 'xorg-utils')
+groups=('compiz-fusion-new' 'compiz-fusion-kde-new' 'compiz-fusion-gtk-new')
+conflicts=('fusion-icon-git')
+install=fusion-icon.install
+source=(${sourcetarballdir}/${tarname}-${pkgver}.tar.xz)
+md5sums=('37464ec7e7a8d1677674c2d51cf2f7fd')
+
+build() {
+  cd ${srcdir}/${pkgname}
+
+  make PREFIX=/usr DESTDIR=${pkgdir} install
+}
+

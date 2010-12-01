@@ -1,0 +1,41 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=libbluray-git
+realname=libbluray
+pkgver=20101113
+pkgrel=1
+lateststablever=0.1
+pkgdesc="A library for Blu-Ray navigation"
+arch=('i686' 'x86_64')
+sourcetarballdir=http://archlinuxgr.tiven.org/sources
+url="http://bd.videolan.org/"
+license=('GPL')
+depends=('openssl>=1.0.0.a' 'aacskeys>=0.4.0c')
+# Does not build yet, with java support enabled.
+#depends=('openssl>=1.0.0.a' 'aacskeys>=0.4.0c' 'openjdk6')
+makedepends=('pkg-config' 'autoconf')
+conflicts=('libbluray' 'libbluray-svn')
+provides=("libbluray=${lateststablever}")
+source=(${sourcetarballdir}/${pkgname}-${pkgver}.tar.xz)
+
+build() {
+  cd ${srcdir}/${realname}
+
+  ./bootstrap
+
+  ./configure --prefix=/usr
+
+# Does not build yet, with java support enabled.
+#	--with-jdk=/usr/lib/jvm/java-6-openjdk \
+#  ./configure --prefix=/usr \
+#	--enable-bdjava
+
+  make
+}
+
+package() {
+  cd ${srcdir}/${realname}
+  make DESTDIR=${pkgdir} install
+}
+
+md5sums=('7933591e683f4aa84f4fc3e0bde6c357')

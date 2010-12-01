@@ -1,0 +1,21 @@
+# Contributor: Jean Pierre Hort <shannonkane@web.de>
+
+pkgname=hwinfo
+pkgver=13.57
+pkgrel=1
+pkgdesc="A simple program that lists results from the hardware detection library."
+arch=('i686' 'x86_64')
+url="http://www.opensuse.org"
+license=('GPL')
+depends=('hal')
+makedepends=('sysfsutils')
+options=('!emptydirs')
+source=(hwinfo-13.57.tar.bz2)
+md5sums=('d1f61543febea3217988d4d649fdb18c')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  sed -i '145,149 d' $srcdir/$pkgname-$pkgver/src/hd/kbd.c
+  make -j1
+  make DESTDIR=$pkgdir install
+} 

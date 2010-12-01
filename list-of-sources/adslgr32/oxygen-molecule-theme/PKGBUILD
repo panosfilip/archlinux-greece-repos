@@ -1,0 +1,30 @@
+# Maintainer: Dylon Edwards <deltaecho@archlinux.us>
+
+pkgname=oxygen-molecule-theme
+pkgver=2.1
+pkgrel=2
+
+pkgdesc="A KDE4 Oxygen theme for GTK+ apps."
+url="http://kde-look.org/content/show.php/Oxygen-Molecule+KDE+%26+GTK%2B+unified+theme?content=103741"
+license=('GPL')
+
+arch=('i686' 'x86_64')
+
+depends=('gtk-qt-engine' 'gtk2' 'qt' 'oxygen-icons')
+provides=("${pkgname}=${pkgver}")
+
+source=("http://kde-look.org/CONTENT/content-files/103741-Oxygen-Molecule_${pkgver}_theme.tar.gz")
+md5sums=('20f71b54ba1511f66794f8679440266a')
+
+install=oxygen-molecule-theme.install
+
+function build()
+{
+	# Install the theme
+	mkdir -p "${pkgdir}/usr/share/themes"
+	tar -xzf kde43-oxygen-molecule.tar.gz -C "${pkgdir}/usr/share/themes"
+
+	# Install the color scheme
+	mkdir -p "${pkgdir}/usr/share/apps/color-schemes"
+	cp OxygenMolecule.colors "${pkgdir}/usr/share/apps/color-schemes"
+}

@@ -1,0 +1,19 @@
+# Contributor: Andreas Schönfelder <passtschu at freenet dot org>
+
+pkgname=lib32-dbus-glib
+pkgver=0.80
+pkgrel32=1
+pkgrel=2
+pkgdesc="GLib bindings for DBUS"
+url="http://www.freedesktop.org/wiki/Software/DBusBindings"
+license=('LGPL')
+arch=(x86_64)
+depends=('lib32-dbus-core' 'lib32-glib2')
+groups=lib32
+source=(ftp://ftp.archlinux.org/extra/os/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz)
+md5sums=('409b60c1ab40c40e531651233c556612')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/lib
+  cp -rPf ${srcdir}/usr/lib/*.so* ${pkgdir}/opt/lib32/usr/lib
+}

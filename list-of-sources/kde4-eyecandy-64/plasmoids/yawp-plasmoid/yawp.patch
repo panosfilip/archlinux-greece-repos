@@ -1,0 +1,70 @@
+diff -ur yawp-0.3.4-old/applet/utils.h yawp-0.3.4/applet/utils.h
+--- yawp-0.3.4-old/applet/utils.h	2010-07-07 20:42:28.000000000 +0200
++++ yawp-0.3.4/applet/utils.h	2010-08-18 08:51:10.320000002 +0200
+@@ -53,7 +53,7 @@
+ 	inline QString
+ 	GetUnitString( int unit )
+ 	{
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 		KUnitConversion::Value v(1.0, unit);
+ 		QString str = v.unit()->symbol();
+ #else
+@@ -77,4 +77,4 @@
+ 	}
+ };
+ 
+-#endif // UTILS_H
+\ Pas de fin de ligne à la fin du fichier.
++#endif // UTILS_H
+diff -ur yawp-0.3.4-old/applet/weatherdataprocessor.cpp yawp-0.3.4/applet/weatherdataprocessor.cpp
+--- yawp-0.3.4-old/applet/weatherdataprocessor.cpp	2010-07-07 20:42:28.000000000 +0200
++++ yawp-0.3.4/applet/weatherdataprocessor.cpp	2010-08-18 08:59:36.186666669 +0200
+@@ -643,7 +643,7 @@
+ 
+ 	if( fromSystem != distanceSystem )
+ 	{
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 		KUnitConversion::Value v( (double) fValue, fromSystem);
+ 		fValue = v.convertTo(distanceSystem).number();
+ #elif KDE_VERSION_MINOR == 3
+@@ -664,7 +664,7 @@
+ 		return SHRT_MAX;
+ 	if( fromSystem != pressureSystem )
+ 	{
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 		KUnitConversion::Value v( (double) fValue, fromSystem);
+ 		fValue = v.convertTo(pressureSystem).number();
+ #elif KDE_VERSION_MINOR >= 3
+@@ -687,7 +687,7 @@
+ 
+ 	if( fromSystem != temperatureSystem )
+ 	{
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 		KUnitConversion::Value v( (double) fValue, fromSystem);
+ 		fValue = v.convertTo(temperatureSystem).number();
+ #elif KDE_VERSION_MINOR >= 3
+@@ -709,7 +709,7 @@
+ 
+ 	if( fromSystem != speedSystem )
+ 	{
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 		KUnitConversion::Value v( (double) fValue, fromSystem);
+ 		fValue = v.convertTo(speedSystem).number();
+ #elif KDE_VERSION_MINOR >= 3
+diff -ur yawp-0.3.4-old/ions/units.h yawp-0.3.4/ions/units.h
+--- yawp-0.3.4-old/ions/units.h	2010-07-07 20:42:28.000000000 +0200
++++ yawp-0.3.4/ions/units.h	2010-08-18 09:13:11.533333335 +0200
+@@ -26,7 +26,7 @@
+ 
+ 
+ //#if KDE_IS_VERSION(4,3,70)
+-#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR == 4
++#if (KDE_VERSION_MINOR == 3 && KDE_VERSION_RELEASE >= 70) || KDE_VERSION_MINOR >= 4
+ 	#include <KUnitConversion/Converter>
+ 	#define FAHRENHEIT KUnitConversion::Fahrenheit
+ 	#define CELSIUS KUnitConversion::Celsius

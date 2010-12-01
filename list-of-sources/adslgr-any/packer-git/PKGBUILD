@@ -1,0 +1,46 @@
+#Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+pkgname=packer-git
+pkgver=20100707
+pkgrel=1
+pkgdesc="Bash wrapper for pacman and aur"
+url="http://github.com/bruenig/packer"
+license="GPL"
+arch=('any')
+makedepends=('git')
+replaces=('packer')
+depends=('bash')
+optdepends=('sudo: install and update packages as non-root'
+            'pacman-color: colorized output')
+_gitroot='git://github.com/bruenig/packer.git'
+_gitname='packer'
+
+build() {
+    cd ${srcdir}/
+
+    msg "Connecting to the GIT server...."
+    if [[ -d ${srcdir}/${_gitname} ]] ; then
+    	cd ${_gitname}
+    	git pull origin
+    	msg "The local files are updated..."
+    else
+    	git clone ${_gitroot}
+    fi
+    
+    msg "GIT checkout done."
+
+    msg "Starting make for: ${pkgname}"
+    
+    if [[ -d ${srcdir}/${_gitname}-build ]]; then
+       msg "Cleaning the previous build directory..." 
+       rm -rf ${srcdir}/${_gitname}-build
+    fi
+
+    git clone ${srcdir}/${_gitname} ${srcdir}/${_gitname}-build
+    
+    cd ${srcdir}/${_gitname}-build
+      
+    mkdir -p "${pkgdir}/usr/bin/"
+    install -m 755 packer "${pkgdir}/usr/bin/packer"
+}
+

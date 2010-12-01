@@ -1,0 +1,23 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=archiso-git
+pkgver=20101113
+pkgrel=1
+lateststablever=0.1
+pkgdesc="Arch Linux livecd/liveusb generation scripts"
+sourcetarballdir=http://archlinuxgr.tiven.org/sources
+arch=('i686' 'x86_64')
+url="http://archlinux.org"
+license=('GPL')
+depends=('mkinitcpio' 'cdrkit' 'squashfs-tools' 'devtools' 'aufs2-util' 'syslinux')
+conflicts=('archiso')
+provides=("archiso=${lateststablever}")
+source=(${sourcetarballdir}/${pkgname}-${pkgver}.tar.xz)
+
+build() {
+  cd ${srcdir}/archiso/archiso
+
+  make DESTDIR="${pkgdir}" install
+}
+
+md5sums=('a2d78ddb0e5dd390f45d609ba36c81c8')

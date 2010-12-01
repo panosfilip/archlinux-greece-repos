@@ -1,0 +1,56 @@
+post_install() {
+
+	cat <<-'EOF'
+		################################################################################
+		#  In order to use this theme, you will need to modify (please backup the file 
+		#+ first) or create the `.gtkrc-2.0-kde4' file in your $HOME directory with the 
+		#+ following (Adjust the font name and size to your liking):
+
+		include "/usr/share/themes/kde43-oxygen-molecule/gtk-2.0/gtkrc"
+		
+		style "user-font"
+		{
+		}
+		widget_class "*" style "user-font"
+		gtk-theme-name="kde43-oxygen-molecule"
+		gtk-font-name="DejaVu Sans 9"
+
+		################################################################################
+		#  If you want GTK+ apps run with root privileges to be themed as well, copy
+		#+ your newly created `~/.gtkrc-2.0-kde4' file to `/root/gtkrc-2.0'
+
+		sudo cp ~/.gtkrc-2.0-kde4 /root/.gtkrc-2.0
+
+		################################################################################
+		#  You may apply the Oxygen-Molecule color scheme to your KDE apps by going to
+		#+ `System Settings -> Appearance -> Colors' and selecting the OxygenMolecule.
+		#
+		#  Also, to make sure your GTK apps use only the Oxygen Molecule color scheme,
+		#+ navigate to `System Settings -> Appearance -> Colors -> Options (tab)' and
+		#+ uncheck the "Apply colors to non-KDE4 applications" option.
+
+		################################################################################
+		# Known Issues:
+		#
+		# 1) The window color in GTK+ applications doesn't always match the frame 100%.
+		#    This is due to a limitation in the pixbuf engine.
+		# 2) Menus do not have rounded corners.  Again, this is a limitation of the 
+		#    pixbuf engine.
+		# 3) The selected menu title isn't supposed to have a gradient.
+		# 4) The left ruler markings in Inkscape are truncated.
+		# 5) When using OpenOffice.org with the GTK style compatibility mode, the top
+		#    and left ends of scrollbars are truncated.
+		# 6) Oxygen-Molecule will not make your KDE3/Qt3 apps appear with an oxygen style.
+		#    I [the author, not packager] have not yet figured out how to change the KDE3 
+		#    theme and colors without inadvertently affecting KDE4 apps.
+	EOF
+}
+
+post_upgrade() {
+
+	post_install $1
+}
+
+op=$1
+shift
+$op $*

@@ -1,0 +1,62 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=mplayer-svn
+pkgver=30366
+pkgrel=1
+pkgdesc="A movie player for linux"
+arch=('i686' 'x86_64')
+tarname=mplayer-svn
+sourcetarballdir=http://adslgr64.tiven.org/sources
+depends=('libxxf86dga' 'libxv' 'libmad' 'giflib' 'cdparanoia' 'libxinerama'
+	 'sdl' 'lame' 'libtheora' 'xvidcore' 'zlib' 'libmng' 'libxss'
+	 'libgl' 'smbclient' 'aalib' 'jack-audio-connection-kit' 'libcaca'
+	 'x264>=20100107' 'faac' 'lirc-utils' 'libxvmc' 'libjpeg>=7'
+	 'libass>=0.9.8' 'libvdpau>=0.3' 'opencore-amr' 'a52dec' 'libdca'
+	 'freetype2>=2.3.11' 'libbs2b>=3.0.0' 'ladspa>=1.13')
+license=('GPL')
+url="http://www.mplayerhq.hu/"
+makedepends=('unzip' 'mesa' 'live-media>=2010.01.11')
+backup=('etc/mplayer/codecs.conf' 'etc/mplayer/input.conf')
+replaces=('mplayer-nogui-dvdnav-amr-vdpau-svn' 'mencoder-svn')
+conflicts=('mplayer' 'mencoder-svn')
+provides=("mplayer=${pkgver}" "mencoder=${pkgver}")
+groups=('video-playback-svn' 'video-encoding-svn')
+install=('mplayer-svn.install')
+source=(${sourcetarballdir}/${tarname}-${pkgver}.tar.bz2)
+md5sums=('4328d252b111b300d4d8202ab3de7076')
+
+build() {
+  cd ${srcdir}/mplayer
+
+  # Custom CFLAGS and LDFLAGS break the mplayer build
+  unset CFLAGS LDFLAGS
+
+  ./configure --prefix=/usr \
+	--enable-runtime-cpudetection \
+	--disable-gui \
+	--disable-arts \
+	--disable-liblzo \
+	--disable-speex \
+	--disable-openal \
+	--disable-fribidi \
+	--disable-libdv \
+	--disable-musepack \
+	--disable-esd \
+	--disable-mga \
+	--enable-xvmc \
+	--language=all \
+	--confdir=/etc/mplayer \
+	--extra-cflags="-fno-strict-aliasing"
+
+  [ "$CARCH" = "i686" ] &&  sed 's|-march=i486|-march=i686|g' -i config.mak
+
+  make
+  make -j1 DESTDIR=${pkgdir} install
+  install -Dm644 etc/{codecs.conf,input.conf,example.conf} ${pkgdir}/etc/mplayer/
+  install -dm755 ${pkgdir}/usr/share/mplayer/
+  rm -rf ${pkgdir}/usr/share/mplayer/font
+
+  rm -rf ${pkgdir}/usr/lib
+  rm -rf ${pkgdir}/usr/share/mplayer
+}
+

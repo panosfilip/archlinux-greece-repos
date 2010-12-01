@@ -1,0 +1,18 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=elltube
+pkgver=0.1final
+pkgrel=2
+pkgdesc="Elltube is a YouTube Downloader and Converter."
+arch=('i686' 'x86_64')
+url="http://www.kde-apps.org/content/show.php/Elltube?content=89693"
+license=('GPL')
+depends=('qt' 'pyqt' 'ffmpeg')
+source=(http://downloads.sourceforge.net/${pkgname}/elltube-${pkgver}.tar.bz2)
+md5sums=('d74ab5d4e2f1e33b432c4954ab1009b3')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir}/ install
+}
+

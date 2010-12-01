@@ -1,0 +1,21 @@
+# $Id$
+# Maintainer: Jeremy Sands <cto@jeremysands.com>
+# Contributor: webjdm <web.jdm@gmail.com>
+
+pkgname=lib32-libidl2
+pkgver=0.8.13
+pkgrel32=1
+pkgrel=1
+pkgdesc="A front-end for CORBA 2.2 IDL and Netscape's XPIDL"
+url="http://www.gnome.org"
+arch=('x86_64')
+license=('LGPL' 'GPL')
+groups=('lib32')
+depends=('lib32-glib2')
+source=(http://www.gtlib.gatech.edu/pub/linux/distributions/archlinux/extra/os/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz)
+md5sums=('8de94c731bd92a59ee7e60923a0a7759')
+
+build() {
+mkdir -p $pkgdir/opt/lib32/usr/lib
+cp -R $srcdir/usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+}

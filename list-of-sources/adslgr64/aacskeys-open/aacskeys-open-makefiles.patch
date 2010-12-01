@@ -1,0 +1,89 @@
+diff -Naur old/aacskeys-0.4.0c/aacskeys.make new/aacskeys-0.4.0c/aacskeys.make
+--- old/aacskeys-0.4.0c/aacskeys.make	2009-08-30 18:18:40.000000000 +0300
++++ new/aacskeys-0.4.0c/aacskeys.make	2010-10-18 00:04:37.000000000 +0300
+@@ -13,12 +13,12 @@
+   LIBDIR := .
+   OBJDIR := obj/linux/Release
+   OUTDIR := bin/linux
+-  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -I "/usr/local/ssl/include"
+-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Wall -fomit-frame-pointer -O3 -pipe
++  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -I "/usr/include/openssl"
++  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH)
+   CXXFLAGS := $(CFLAGS)
+-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -s -L"/usr/local/ssl/lib" -lcrypto
++  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L"/usr/lib" -lcrypto
+   LDDEPS :=
+-  RESFLAGS := -D "_REENTRANT" -I "/usr/local/ssl/include"
++  RESFLAGS := -D "_REENTRANT" -I "/usr/include/openssl"
+   TARGET := aacskeys
+   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+ endif
+@@ -28,12 +28,12 @@
+   LIBDIR := .
+   OBJDIR := obj/linux/Debug
+   OUTDIR := bin/linux/debug
+-  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "DEBUG" -I "/usr/local/ssl/include"
+-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -Wall -pipe
++  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "DEBUG" -I "/usr/include/openssl"
++  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g
+   CXXFLAGS := $(CFLAGS)
+   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L"/usr/local/ssl/lib" -lcrypto
+   LDDEPS :=
+-  RESFLAGS := -D "_REENTRANT" -D "DEBUG" -I "/usr/local/ssl/include"
++  RESFLAGS := -D "_REENTRANT" -D "DEBUG" -I "/usr/include/openssl"
+   TARGET := aacskeys
+   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+ endif
+diff -Naur old/aacskeys-0.4.0c/libaacskeys.make new/aacskeys-0.4.0c/libaacskeys.make
+--- old/aacskeys-0.4.0c/libaacskeys.make	2009-08-30 18:18:39.000000000 +0300
++++ new/aacskeys-0.4.0c/libaacskeys.make	2010-10-18 00:14:42.774581763 +0300
+@@ -13,12 +13,12 @@
+   LIBDIR := .
+   OBJDIR := obj/linux/ReleaseLib
+   OUTDIR := lib/linux
+-  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "JNILIB" -I "/usr/local/ssl/include" -I "/usr/lib/jvm/java-6-sun/include" -I "/usr/lib/jvm/java-6-sun/include/linux"
+-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC -Wall -fomit-frame-pointer -O3 -pipe
++  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "JNILIB" -I "/usr/include/openssl" -I "/usr/lib/jvm/java-6-openjdk/include" -I "/usr/lib/jvm/java-6-openjdk/include/linux"
++  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC
+   CXXFLAGS := $(CFLAGS)
+-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s -L"/usr/local/ssl/lib" -lcrypto
++  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -s -L"/usr/lib" -lcrypto
+   LDDEPS :=
+-  RESFLAGS := -D "_REENTRANT" -D "JNILIB" -I "/usr/local/ssl/include" -I "/usr/lib/jvm/java-6-sun/include" -I "/usr/lib/jvm/java-6-sun/include/linux"
++  RESFLAGS := -D "_REENTRANT" -D "JNILIB" -I "/usr/include/openssl" -I "/usr/lib/jvm/java-6-openjdk/include" -I "/usr/lib/jvm/java-6-openjdk/include/linux"
+   TARGET := libaacskeys.so
+   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+ endif
+@@ -28,12 +28,12 @@
+   LIBDIR := .
+   OBJDIR := obj/linux/DebugLib
+   OUTDIR := lib/linux/debug
+-  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "JNILIB" -D "DEBUG" -I "/usr/local/ssl/include" -I "/usr/lib/jvm/java-6-sun/include" -I "/usr/lib/jvm/java-6-sun/include/linux"
+-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC -g -Wall -pipe
++  CPPFLAGS := $(DEPFLAGS) -D "_REENTRANT" -D "JNILIB" -D "DEBUG" -I "/usr/include/openssl" -I "/usr/lib/jvm/java-6-openjdk/include" -I "/usr/lib/jvm/java-6-openjdk/include/linux"
++  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC -g
+   CXXFLAGS := $(CFLAGS)
+-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -L"/usr/local/ssl/lib" -lcrypto
++  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -shared -L"/usr/lib" -lcrypto
+   LDDEPS :=
+-  RESFLAGS := -D "_REENTRANT" -D "JNILIB" -D "DEBUG" -I "/usr/local/ssl/include" -I "/usr/lib/jvm/java-6-sun/include" -I "/usr/lib/jvm/java-6-sun/include/linux"
++  RESFLAGS := -D "_REENTRANT" -D "JNILIB" -D "DEBUG" -I "/usr/include/openssl" -I "/usr/lib/jvm/java-6-openjdk/include" -I "/usr/lib/jvm/java-6-openjdk/include/linux"
+   TARGET := libaacskeys.so
+   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+ endif
+diff -Naur old/aacskeys-0.4.0c/premake.lua new/aacskeys-0.4.0c/premake.lua
+--- old/aacskeys-0.4.0c/premake.lua	2009-08-30 18:18:39.000000000 +0300
++++ new/aacskeys-0.4.0c/premake.lua	2010-10-18 00:12:58.650860451 +0300
+@@ -23,9 +23,9 @@
+    OPENSSL_LIB = "/opt/local/lib"
+    JDK_INCLUDE = "/System/Library/Frameworks/JavaVM.framework/Headers"
+ else
+-   OPENSSL_INCLUDE = "/usr/local/ssl/include"
+-   OPENSSL_LIB = "/usr/local/ssl/lib"
+-   JDK_INCLUDE = "/usr/lib/jvm/java-6-sun/include"
++   OPENSSL_INCLUDE = "/usr/include/openssl"
++   OPENSSL_LIB = "/usr/lib"
++   JDK_INCLUDE = "/usr/lib/jvm/java-6-openjdk/include"
+ end
+ 
+ 

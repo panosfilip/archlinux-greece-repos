@@ -1,0 +1,42 @@
+# Maintainer: rangergr@archlinux.gr 
+
+pkgname=kwebkitpart-svn
+pkgver=1172947
+pkgrel=1
+pkgdesc="Webkit part"
+url="http://techbase.kde.org/Projects/WebKit"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('kdebase-runtime>=4.5.0')
+makedepends=('cmake' 'automoc4' 'subversion')
+provides=("kwebkitpart=0.9.6")
+conflicts=("webkit-kpart-svn" "webkitkde-svn" "kwebkitpart")
+replaces=('webkit-kpart-svn' 'webkitkde-svn')
+source=()
+md5sums=()
+install='kwebkitpart-svn.install'
+
+_svntrunk="svn://anonsvn.kde.org/home/kde/trunk/extragear/base/kwebkitpart"
+_svnmod=kwebkitpart
+
+build() {
+  cd ${srcdir}
+
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  cp -r $_svnmod $_svnmod-build
+  cd $_svnmod-build/kwebkitpart
+  mkdir build
+  cd build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+  make 
+  make DESTDIR=${pkgdir} install
+}
+

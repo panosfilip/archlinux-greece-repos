@@ -1,0 +1,25 @@
+# Contributor: WAntilles <wantilles@adslgr.com>
+
+pkgname=compiz-fusion-plugins-main
+pkgver=0.8.4
+pkgrel=1
+pkgdesc="Compiz Fusion Main plugins"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org/"
+license=('GPL')
+depends=("compiz-core>=${pkgver}" 'libjpeg>=7' 'librsvg' "compiz-bcop>=${pkgver}" 'libxdamage')
+makedepends=('intltool' 'pkg-config' 'gettext')
+groups=('compiz-fusion-new' 'compiz-fusion-kde-new' 'compiz-fusion-gtk-new')
+conflicts=('compiz-fusion-plugins-main-git')
+source=(http://releases.compiz-fusion.org/${pkgver}/compiz-plugins-main-${pkgver}.tar.bz2)
+options=(!libtool)
+md5sums=('7ac2b073d421a871b4d9f0741dde9164')
+
+build() {
+  cd "${srcdir}/compiz-plugins-main-${pkgver}"
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR="${pkgdir}" install
+}
+

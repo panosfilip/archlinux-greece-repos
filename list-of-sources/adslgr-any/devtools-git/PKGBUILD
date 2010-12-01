@@ -1,0 +1,49 @@
+# Contributor: Flamelab <panosfilip@gmail.com>
+
+pkgname=devtools-git
+pkgver=20100224
+_realver=0.1
+pkgrel=1
+pkgdesc="Tools to use in order to maintain the archlinux-greece repositories."
+arch=("any")
+url="http://gitorious.org/adslgr-abs/devtools"
+depends=("bash" "git")
+makedepends=("git")
+provides=(${pkgname}=${pkgver})
+license=('GPL2')
+backup=("etc/devtools.conf")
+
+_gitroot="git://gitorious.org/adslgr-abs/devtools.git"
+_gitname="devtools"
+
+build() 
+
+{ 
+    cd ${srcdir}/
+
+    msg "Connecting to the Gitorious GIT server...."
+    if [[ -d ${srcdir}/${_gitname} ]] ; then
+    	cd ${_gitname}
+    	git pull origin
+    	msg "The local files are updated..."
+    else
+    	git clone ${_gitroot}
+    fi
+    
+    msg "GIT checkout done."
+    
+    if [[ -d ${srcdir}/${_gitname}-build ]]; then
+       msg "Cleaning the previous build directory..." 
+       rm -rf ${srcdir}/${_gitname}-build
+    fi
+
+    git clone ${srcdir}/${_gitname} ${srcdir}/${_gitname}-build
+    
+    cd ${srcdir}/${_gitname}-build/devtools
+        
+    mkdir -p ${pkgdir}/{usr/bin,usr/share/archlinux-greece,etc}
+    install -Dm755 make_abs_tarball make_mplayer_mt_git make_source_tarball update_db update_local_git_repo ${pkgdir}/usr/bin
+    install -Dm755 common_functions ${pkgdir}/usr/share/archlinux-greece
+    install -Dm644 devtools.conf ${pkgdir}/etc
+   
+}

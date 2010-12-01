@@ -1,0 +1,19 @@
+--- ./rootactions-servicemenu.pl	2008-09-17 20:54:47.000000000 +0200
++++ /usr/bin/rootactions-servicemenu.pl	2008-09-20 20:52:54.000000000 +0200
+@@ -596,16 +596,7 @@
+ }
+ 
+ sub get_kde_path {
+-	if ( exists $ENV{KDEDIR} ) {
+-		$KDEBINPATH = "$ENV{KDEDIR}/bin/";
+-	}
+-        elsif ( exists $ENV{KDEDIRS} ) {
+-                $KDEBINPATH = "$ENV{KDEDIRS}/bin/";
+-        }
+-
+-	else {
+ 		$KDEBINPATH = "/usr/bin/";
+-	}
+ 	
+ }
+ 

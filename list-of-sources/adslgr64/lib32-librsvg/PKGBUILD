@@ -1,0 +1,21 @@
+# Contributor: DonVla <donvla@users.sourceforge.net>
+# Maintainer: ranger @ adslgr.com
+pkgname=lib32-librsvg
+pkgver=2.26.0
+pkgrel=1
+_pkgrel32=1
+pkgdesc="SAX-based renderer for SVG files into a GdkPixbuf"
+arch=('x86_64')
+url="http://librsvg.sourceforge.net/"
+license=('LGPL')
+depends=('lib32-gtk2' 'lib32-libcroco' 'lib32-libgsf')
+groups=lib32
+source=(ftp://ftp.archlinux.org/extra/os/i686/${pkgname/lib32-/}-${pkgver}-${_pkgrel32}-i686.pkg.tar.gz)
+md5sums=('4711e2d09bb6b76d579e7c6e36c5bdc4')
+sha256sums=('8fc3121dea786c094983a9f2e5655b2c31dbf4ce227cc9b35c1f48c3549fa85b')
+
+build() {
+  mkdir -p ${pkgdir}/opt/lib32/usr/lib
+  cp -rPf ${srcdir}/usr/lib/*.so* ${pkgdir}/opt/lib32/usr/lib
+  cp -rPf ${srcdir}/usr/lib/gtk-2.0 ${pkgdir}/opt/lib32/usr/lib
+}

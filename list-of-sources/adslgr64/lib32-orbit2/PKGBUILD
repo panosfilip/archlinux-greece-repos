@@ -1,0 +1,20 @@
+# Contributor: Andreas Schönfelder <passtschu at freenet dot de>
+
+pkgname=lib32-orbit2
+pkgver=2.14.17
+pkgrel32=1
+pkgrel=1
+pkgdesc="Thin/fast CORBA ORB"
+arch=('x86_64')
+license=('LGPL' 'GPL')
+groups=('lib32')
+depends=('lib32-libidl2')
+url="http://www.gnome.org"
+source=("ftp://ftp.archlinux.org/extra/os/i686/${pkgname/lib32-/}-${pkgver}-${pkgrel32}-i686.pkg.tar.gz")
+md5sums=('ed8c80a76d9e9adbdba48317f3d16e13')
+
+build() {
+	mkdir -p $pkgdir/opt/lib32/usr/lib
+	cp -R $srcdir/usr/lib/*.so* $pkgdir/opt/lib32/usr/lib
+}
+

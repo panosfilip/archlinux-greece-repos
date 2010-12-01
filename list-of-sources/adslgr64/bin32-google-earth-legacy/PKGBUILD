@@ -1,0 +1,77 @@
+# This PKGBUILD is based on Penguin's one for google-earth (i686 only) 
+
+# Contributor: Jesus Lazaro Plaza <jesuslazaro84@gmail.com>
+# Adslgr64 Maintainer: Flamelab <panosfilip@gmail.com>
+
+_use_arch_libs="yes" # Change to "yes" if you want to use provided-by-Arch libraries instead of provided-by-Google ones.
+
+pkgname=bin32-google-earth-legacy
+_pkgname=google-earth
+pkgver=5.1.3535.3218
+pkgrel=1
+pkgdesc="32 bits binaries of google-earth for Arch64"
+url="http://earth.google.com"
+license=('custom')
+depends=('lib32-libsm' 'lib32-libxrandr' 'lib32-libgl' 'lib32-glib2' 'lib32-libxi' 'lib32-pcre' 'lib32-freetype2' 'lib32-libxdamage' 'lib32-qt' 'lib32-mesa' 'lib32-curl' 'lib32-sqlite3')
+optdepends=('ttf-bitstream-vera: Fonts'
+            'lib32-nss-mdns: In case the application fails to contact the servers'
+	    'lib32-nvidia-utils: Provides lib32-libgl for many nVidia graphics cards'
+	    'lib32-catalyst-utils: Provides lib32-libgl for many ATI graphics cards'
+	    'lib32-libgtk2: SCIM support')
+provides=('bin32-google-earth')
+conflicts=('bin32-google-earth')
+source=(http://dl.google.com/earth/client/advanced/previous/GoogleEarthLinux.bin
+#source=(http://dl.google.com/earth/client/advanced/previous/GoogleEarthLinux.bin
+	http://earth.google.com/intl/en/license.html
+	googleearth
+	googleearth.desktop
+	googleearth-mimetypes.xml
+	qt.conf)
+arch=('x86_64')
+
+_libs_to_remove="libcurl.so.4 libGLU.so.1 libQtCore.so.4 libQtGui.so.4 libQtNetwork.so.4 libQtWebKit.so.4"
+[ "${_use_arch_libs}" == "no" ] && depends=('lib32-libsm' 'lib32-libxrandr' 'lib32-libgl' 'lib32-glib2' 'lib32-libxi' 'lib32-pcre' 'lib32-freetype2' 'lib32-libxdamage')
+
+build() {
+	cd ${srcdir}
+
+	# Extract archive
+	sh ./GoogleEarthLinux.bin --noexec --target ${srcdir}/${_pkgname} 
+
+	# Install binaries and data files
+	mkdir -p ${pkgdir}/opt/${_pkgname}
+	tar -xpf ${srcdir}/${_pkgname}/googleearth-linux-x86.tar -C ${pkgdir}/opt/${_pkgname}/ 
+	tar -xpf ${srcdir}/${_pkgname}/googleearth-data.tar -C ${pkgdir}/opt/${_pkgname}/ 
+
+	# Install executable
+	install -D -m755 ${srcdir}/googleearth ${pkgdir}/usr/bin/googleearth 
+
+	# Install .desktop file
+	install -D -m644 ${srcdir}/googleearth.desktop ${pkgdir}/usr/share/applications/googleearth.desktop 
+
+	# Install shared MIME info package
+	install -D -m644 ${srcdir}/googleearth-mimetypes.xml ${pkgdir}/usr/share/mime/packages/googleearth-mimetypes.xml 
+
+	# Install icon
+	install -D -m644 ${srcdir}/${_pkgname}/googleearth-icon.png ${pkgdir}/usr/share/pixmaps/googleearth-icon.png 
+	
+	# Install license
+	install -D -m644 ${srcdir}/license.html ${pkgdir}/usr/share/licenses/${_pkgname}/license.html 
+
+	# Change ownership to root
+	chown -R root:root ${pkgdir}/* 
+
+	# Removing provided libraries to use Arch ones (only if _use_arch_libs is set to "yes")
+	if [ "${_use_arch_libs}" == "yes" ]; then
+		cd ${pkgdir}/opt/${_pkgname} 
+		rm ${_libs_to_remove} 
+		install -D -m644 ${srcdir}/qt.conf ${pkgdir}/opt/${_pkgname}/qt.conf
+	fi
+}
+
+md5sums=('69a52b92691f725b15e28b9fa2a123b2'
+         'c5f8b0eba226001f89d8fed209f35426'
+         'fe3554dccff4a2baa9e4f17140e8edab'
+         'be7209d3edb3df110946acf5e0cd0db3'
+         '84e1efd656f86c52333cc629b31accb0'
+         '80a783c71b7f0b5c7161cef467801147')
